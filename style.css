@@ -7,3 +7,17 @@ body {
 canvas {
   display: block;
 }
+/* Bauer Logo Styling */
+#bauer-logo {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 160px;
+  opacity: 0.85;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 10;
+}
+
+#bauer-logo:hover {
+  opacity: 1;
+}
