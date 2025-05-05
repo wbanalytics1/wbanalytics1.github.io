@@ -2,11 +2,34 @@ body {
   margin: 0;
   background-color: #0d0d0d;
   overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 canvas {
   display: block;
 }
+
+#title {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 2em;
+  font-weight: bold;
+  color: #00ffff;
+  animation: neonColors 5s infinite;
+  z-index: 10;
+}
+
+/* Neon color animation for the title */
+@keyframes neonColors {
+  0% { color: #ff00ff; }
+  20% { color: #00ffff; }
+  40% { color: #ffff00; }
+  60% { color: #00ff00; }
+  80% { color: #ff0000; }
+  100% { color: #ff00ff; }
+}
+
 /* Bauer Logo Styling */
 #bauer-logo {
   position: absolute;

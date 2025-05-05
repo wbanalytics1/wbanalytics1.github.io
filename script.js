@@ -1,110 +1,118 @@
-const canvas = document.getElementById("network");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('nnCanvas');
+const ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+let width, height;
+function resizeCanvas() {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-const layers = [4, 6, 4];
+// Create nodes
 const nodes = [];
-const connections = [];
-const spacingX = canvas.width / (layers.length + 1);
-const radius = 8;
-
-const neonBlue = "#00ffff";
-const gold = "#ffd700";
-
-// List of neon colors to cycle through
-const neonColors = ["#00ffff", "#ff00ff", "#39ff14", "#ffd700", "#ff69b4"];
-let colorIndex = 0;
-let colorTimer = 0;
-
-for (let i = 0; i < layers.length; i++) {
-  const layer = [];
-  const spacingY = canvas.height / (layers[i] + 1);
-  for (let j = 0; j < layers[i]; j++) {
-    layer.push({
-      x: spacingX * (i + 1),
-      y: spacingY * (j + 1)
-    });
-  }
-  nodes.push(layer);
+const nodeCount = 50;
+for (let i = 0; i < nodeCount; i++) {
+  nodes.push({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: (Math.random() - 0.5) * 0.5
+  });
 }
 
-// Create connections between layers
-for (let i = 0; i < nodes.length - 1; i++) {
-  for (let a of nodes[i]) {
-    for (let b of nodes[i + 1]) {
-      connections.push({ from: a, to: b });
+// Create connections
+const connections = [];
+for (let i = 0; i < nodeCount; i++) {
+  for (let j = i + 1; j < nodeCount; j++) {
+    if (Math.random() < 0.05) {
+      connections.push([i, j]);
     }
   }
 }
 
-let progress = 0;
+// Glowing ball
+let path = [];
+let currentConnection = 0;
+function createPath() {
+  path = [];
+  const shuffled = nodes.slice().sort(() => 0.5 - Math.random());
+  for (let i = 0; i < shuffled.length; i++) {
+    path.push(shuffled[i]);
+  }
+  currentConnection = 0;
+}
+createPath();
 
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+let ballPos = { x: path[0].x, y: path[0].y };
+let targetIndex = 1;
+let speed = 2;
 
-  // Background
-  ctx.fillStyle = "#000";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+function animate() {
+  ctx.clearRect(0, 0, width, height);
 
-  // Cycle through neon colors every 30 frames
-  colorTimer++;
-  if (colorTimer > 30) {
-    colorTimer = 0;
-    colorIndex = (colorIndex + 1) % neonColors.length;
+  // Update node positions
+  for (let node of nodes) {
+    node.x += node.vx;
+    node.y += node.vy;
+
+    if (node.x < 0 || node.x > width) node.vx *= -1;
+    if (node.y < 0 || node.y > height) node.vy *= -1;
   }
 
-  // Draw name
-  ctx.font = "bold 24px Orbitron, sans-serif";
-  ctx.fillStyle = neonColors[colorIndex];
-  ctx.shadowColor = neonColors[colorIndex];
-  ctx.shadowBlur = 15;
-  ctx.fillText("William David Boggs", 20, 30);
-
   // Draw connections
-  for (let conn of connections) {
+  ctx.strokeStyle = '#00ffff';
+  ctx.lineWidth = 0.5;
+  for (let [i, j] of connections) {
     ctx.beginPath();
-    ctx.moveTo(conn.from.x, conn.from.y);
-    ctx.lineTo(conn.to.x, conn.to.y);
-    ctx.strokeStyle = neonBlue;
-    ctx.shadowColor = neonBlue;
-    ctx.shadowBlur = 8;
-    ctx.lineWidth = 1;
+    ctx.moveTo(nodes[i].x, nodes[i].y);
+    ctx.lineTo(nodes[j].x, nodes[j].y);
     ctx.stroke();
   }
 
   // Draw nodes
-  for (let layer of nodes) {
-    for (let node of layer) {
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-      ctx.fillStyle = neonBlue;
-      ctx.shadowColor = neonBlue;
-      ctx.shadowBlur = 10;
-      ctx.fill();
-    }
+  for (let node of nodes) {
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#00ffff';
+    ctx.fill();
   }
 
-  // Animate glowing signal
-  let conn = connections[Math.floor(progress)];
-  if (conn) {
-    let t = progress % 1;
-    let x = conn.from.x + (conn.to.x - conn.from.x) * t;
-    let y = conn.from.y + (conn.to.y - conn.from.y) * t;
+  // Move glowing ball
+  if (path.length > 1) {
+    let target = path[targetIndex];
+    let dx = target.x - ballPos.x;
+    let dy = target.y - ballPos.y;
+    let dist = Math.sqrt(dx * dx + dy * dy);
 
+    if (dist < speed) {
+      ballPos.x = target.x;
+      ballPos.y = target.y;
+      targetIndex++;
+      if (targetIndex >= path.length) {
+        createPath();
+        ballPos.x = path[0].x;
+        ballPos.y = path[0].y;
+        targetIndex = 1;
+      }
+    } else {
+      ballPos.x += (dx / dist) * speed;
+      ballPos.y += (dy / dist) * speed;
+    }
+
+    // Draw glowing ball
     ctx.beginPath();
-    ctx.arc(x, y, 6, 0, 2 * Math.PI);
-    ctx.fillStyle = gold;
-    ctx.shadowColor = gold;
+    ctx.arc(ballPos.x, ballPos.y, 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'gold';
+    ctx.shadowColor = 'gold';
     ctx.shadowBlur = 20;
     ctx.fill();
-
-    progress += 0.02;
-    if (progress >= connections.length) progress = 0;
+    ctx.shadowBlur = 0;
   }
 
-  requestAnimationFrame(draw);
+  requestAnimationFrame(animate);
 }
 
-draw();
+animate();
