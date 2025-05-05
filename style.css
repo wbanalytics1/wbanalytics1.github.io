@@ -1,31 +1,23 @@
-/* Futuristic Glow Style */
-
-html, body {
+body, html {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  background: linear-gradient(135deg, #0b0c10 0%, #1f2833 100%);
-  font-family: 'Orbitron', sans-serif;
+  background-color: #0a0a0a;
   height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 canvas {
   display: block;
-  z-index: 1;
 }
 
-body::before {
-  content: '';
+.overlay h1 {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: radial-gradient(circle at center, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
-  animation: pulse 4s infinite ease-in-out;
-  z-index: 0;
-}
-
-@keyframes pulse {
-  0% { opacity: 0.2; }
-  50% { opacity: 0.4; }
-  100% { opacity: 0.2; }
+  top: 30px;
+  width: 100%;
+  text-align: center;
+  color: #00f7ff;
+  font-size: 3rem;
+  text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
+  z-index: 1;
 }

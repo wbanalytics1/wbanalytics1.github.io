@@ -1,84 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Futuristic Neural Network</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-  </style>
-</head>
-<body>
-  <canvas id="neuralCanvas"></canvas>
-  <script>
-    const canvas = document.getElementById("neuralCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+const canvas = document.getElementById("network");
+const ctx = canvas.getContext("2d");
 
-    const nodeCount = 7;
-    const layerCount = 4;
-    const nodeRadius = 8;
-    const spacingX = canvas.width / (layerCount + 1);
-    const spacingY = canvas.height / (nodeCount + 1);
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-    const nodes = [];
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  draw();
+});
 
-    for (let i = 0; i < layerCount; i++) {
-      nodes[i] = [];
-      for (let j = 0; j < nodeCount; j++) {
-        const x = spacingX * (i + 1);
-        const y = spacingY * (j + 1);
-        nodes[i].push({ x, y });
+const layers = [5, 5, 5]; // 3 layers with 5 nodes each
+const nodes = [];
+const connections = [];
+
+function createNetwork() {
+  nodes.length = 0;
+  connections.length = 0;
+
+  const spacingX = canvas.width / (layers.length + 1);
+  const spacingY = canvas.height / (layers[0] + 1);
+
+  layers.forEach((count, layerIndex) => {
+    for (let i = 0; i < count; i++) {
+      const x = spacingX * (layerIndex + 1);
+      const y = spacingY * (i + 1);
+      nodes.push({ x, y, layer: layerIndex });
+    }
+  });
+
+  nodes.forEach((from) => {
+    nodes.forEach((to) => {
+      if (to.layer === from.layer + 1) {
+        connections.push({ from, to, progress: 0 });
       }
-    }
-
-    function drawConnections() {
-      ctx.strokeStyle = "rgba(0, 255, 255, 0.08)";
-      ctx.lineWidth = 1;
-      for (let i = 0; i < layerCount - 1; i++) {
-        for (let from of nodes[i]) {
-          for (let to of nodes[i + 1]) {
-            ctx.beginPath();
-            ctx.moveTo(from.x, from.y);
-            ctx.lineTo(to.x, to.y);
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    function drawNodes() {
-      for (let layer of nodes) {
-        for (let node of layer) {
-          const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, nodeRadius * 2);
-          gradient.addColorStop(0, "#0ff");
-          gradient.addColorStop(1, "transparent");
-          ctx.beginPath();
-          ctx.fillStyle = gradient;
-          ctx.arc(node.x, node.y, nodeRadius * 1.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.beginPath();
-          ctx.fillStyle = "#0ff";
-          ctx.arc(node.x, node.y, nodeRadius, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawConnections();
-      drawNodes();
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
     });
-  </script>
-</body>
-</html>
+  });
+}
+
+function drawNode(x, y) {
+  ctx.beginPath();
+  ctx.arc(x, y, 8, 0, Math.PI * 2);
+  ctx.fillStyle = "#00f7ff";
+  ctx.shadowBlur = 20;
+  ctx.shadowColor = "#00f7ff";
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+function drawConnection(from, to, progress) {
+  ctx.beginPath();
+  ctx.moveTo(from.x, from.y);
+  ctx.lineTo(to.x, to.y);
+  ctx.strokeStyle = "rgba(0, 247, 255, 0.1)";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Glow effect traveling
+  const glowX = from.x + (to.x - from.x) * progress;
+  const glowY = from.y + (to.y - from.y) * progress;
+  ctx.beginPath();
+  ctx.arc(glowX, glowY, 4, 0, Math.PI * 2);
+  ctx.fillStyle = "#ffffff";
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = "#00f7ff";
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  connections.forEach(conn => {
+    conn.progress += 0.01;
+    if (conn.progress > 1) conn.progress = 0;
+    drawConnection(conn.from, conn.to, conn.progress);
+  });
+
+  nodes.forEach(node => drawNode(node.x, node.y));
+  requestAnimationFrame(animate);
+}
+
+createNetwork();
+animate();
