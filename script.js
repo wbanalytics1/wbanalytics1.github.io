@@ -1,85 +1,96 @@
-const canvas = document.getElementById("networkCanvas");
+const canvas = document.getElementById("network");
 const ctx = canvas.getContext("2d");
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const layers = [4, 6, 4, 2]; // layers of the network
+const layers = [4, 6, 4]; // 3 layers: input, hidden, output
 const nodes = [];
 const connections = [];
+const spacingX = canvas.width / (layers.length + 1);
+const radius = 8;
 
-// Layout nodes
+const neonBlue = "#00ffff";
+const gold = "#ffd700";
+
 for (let i = 0; i < layers.length; i++) {
-  const layerNodes = [];
+  const layer = [];
+  const spacingY = canvas.height / (layers[i] + 1);
   for (let j = 0; j < layers[i]; j++) {
-    layerNodes.push({
-      x: (canvas.width / (layers.length + 1)) * (i + 1),
-      y: (canvas.height / (layers[i] + 1)) * (j + 1),
+    layer.push({
+      x: spacingX * (i + 1),
+      y: spacingY * (j + 1)
     });
   }
-  nodes.push(layerNodes);
+  nodes.push(layer);
 }
 
-// Create connection paths
+// Create connections between layers
 for (let i = 0; i < nodes.length - 1; i++) {
-  for (let a = 0; a < nodes[i].length; a++) {
-    for (let b = 0; b < nodes[i + 1].length; b++) {
-      connections.push({
-        from: nodes[i][a],
-        to: nodes[i + 1][b],
-        progress: 0,
-      });
+  for (let a of nodes[i]) {
+    for (let b of nodes[i + 1]) {
+      connections.push({ from: a, to: b });
     }
   }
 }
 
-let activeConnection = 0;
+let progress = 0;
 
-function animate() {
+function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // Background
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw title
+  ctx.font = "bold 20px Orbitron, sans-serif";
+  ctx.fillStyle = neonBlue;
+  ctx.fillText("wbanalytics1", 20, 30);
+
   // Draw connections
-  ctx.strokeStyle = "#222";
-  ctx.lineWidth = 1.5;
-  connections.forEach(conn => {
+  for (let conn of connections) {
     ctx.beginPath();
     ctx.moveTo(conn.from.x, conn.from.y);
     ctx.lineTo(conn.to.x, conn.to.y);
+    ctx.strokeStyle = neonBlue;
+    ctx.shadowColor = neonBlue;
+    ctx.shadowBlur = 8;
+    ctx.lineWidth = 1;
     ctx.stroke();
-  });
+  }
 
   // Draw nodes
-  nodes.flat().forEach(node => {
-    ctx.beginPath();
-    ctx.arc(node.x, node.y, 8, 0, Math.PI * 2);
-    ctx.fillStyle = "#00ffff";
-    ctx.shadowColor = "#00ffff";
-    ctx.shadowBlur = 10;
-    ctx.fill();
-  });
-
-  // Animate signal
-  if (connections.length > 0) {
-    const conn = connections[activeConnection];
-    const { from, to, progress } = conn;
-
-    const x = from.x + (to.x - from.x) * progress;
-    const y = from.y + (to.y - from.y) * progress;
-
-    ctx.beginPath();
-    ctx.arc(x, y, 6, 0, Math.PI * 2);
-    ctx.fillStyle = "#ff00ff";
-    ctx.shadowColor = "#ff00ff";
-    ctx.shadowBlur = 15;
-    ctx.fill();
-
-    conn.progress += 0.02;
-    if (conn.progress >= 1) {
-      conn.progress = 0;
-      activeConnection = (activeConnection + 1) % connections.length;
+  for (let layer of nodes) {
+    for (let node of layer) {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+      ctx.fillStyle = neonBlue;
+      ctx.shadowColor = neonBlue;
+      ctx.shadowBlur = 10;
+      ctx.fill();
     }
   }
 
-  requestAnimationFrame(animate);
+  // Animate glowing signal
+  let conn = connections[Math.floor(progress)];
+  if (conn) {
+    let t = progress % 1;
+    let x = conn.from.x + (conn.to.x - conn.from.x) * t;
+    let y = conn.from.y + (conn.to.y - conn.from.y) * t;
+
+    ctx.beginPath();
+    ctx.arc(x, y, 6, 0, 2 * Math.PI);
+    ctx.fillStyle = gold;
+    ctx.shadowColor = gold;
+    ctx.shadowBlur = 20;
+    ctx.fill();
+
+    progress += 0.02;
+    if (progress >= connections.length) progress = 0;
+  }
+
+  requestAnimationFrame(draw);
 }
 
-animate();
+draw();
