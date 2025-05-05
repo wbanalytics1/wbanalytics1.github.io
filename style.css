@@ -1,25 +1,31 @@
-body {
-  margin: 0;
-  overflow: hidden;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #ffffff;
-  font-family: 'Orbitron', sans-serif;
-}
+/* Futuristic Glow Style */
 
-h1 {
-  position: absolute;
-  top: 30px;
-  width: 100%;
-  text-align: center;
-  font-size: 2.5em;
-  color: #00ffff;
-  text-shadow: 0 0 10px #00ffffaa, 0 0 20px #00ffff55;
-  z-index: 10;
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0b0c10 0%, #1f2833 100%);
+  font-family: 'Orbitron', sans-serif;
+  height: 100%;
 }
 
 canvas {
   display: block;
+  z-index: 1;
+}
+
+body::before {
+  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at center, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+  animation: pulse 4s infinite ease-in-out;
+  z-index: 0;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.2; }
 }
