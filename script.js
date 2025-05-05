@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const layers = [4, 6, 4]; // 3 layers: input, hidden, output
+const layers = [4, 6, 4];
 const nodes = [];
 const connections = [];
 const spacingX = canvas.width / (layers.length + 1);
@@ -12,6 +12,11 @@ const radius = 8;
 
 const neonBlue = "#00ffff";
 const gold = "#ffd700";
+
+// List of neon colors to cycle through
+const neonColors = ["#00ffff", "#ff00ff", "#39ff14", "#ffd700", "#ff69b4"];
+let colorIndex = 0;
+let colorTimer = 0;
 
 for (let i = 0; i < layers.length; i++) {
   const layer = [];
@@ -43,10 +48,19 @@ function draw() {
   ctx.fillStyle = "#000";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Draw title
-  ctx.font = "bold 20px Orbitron, sans-serif";
-  ctx.fillStyle = neonBlue;
-  ctx.fillText("wbanalytics1", 20, 30);
+  // Cycle through neon colors every 30 frames
+  colorTimer++;
+  if (colorTimer > 30) {
+    colorTimer = 0;
+    colorIndex = (colorIndex + 1) % neonColors.length;
+  }
+
+  // Draw name
+  ctx.font = "bold 24px Orbitron, sans-serif";
+  ctx.fillStyle = neonColors[colorIndex];
+  ctx.shadowColor = neonColors[colorIndex];
+  ctx.shadowBlur = 15;
+  ctx.fillText("William David Boggs", 20, 30);
 
   // Draw connections
   for (let conn of connections) {
