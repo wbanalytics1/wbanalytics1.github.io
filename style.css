@@ -298,12 +298,25 @@ body {
 
 
 .brand-tile--image img {
-  width: 44px;
-  height: 44px;
+  width: 60px;
+  height: 52px;
   object-fit: contain;
   object-position: center;
   border-radius: 8px;
   filter: drop-shadow(0 0 6px rgba(112, 227, 255, 0.24));
+}
+
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .brand-tile span {
@@ -377,6 +390,7 @@ body {
     padding: 1rem;
     padding-bottom: 7.4rem;
   }
+}
 
   .hero,
   .control-panel {
