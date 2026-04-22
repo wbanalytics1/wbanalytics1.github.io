@@ -428,6 +428,16 @@ function updateNodes(dt, now) {
   } else if (!pointer.active) {
     pointer.hoveredNode = -1;
   }
+
+  if (pointer.active && (now - pointer.lastHoverCheck > 40 || pointer.dirty)) {
+    pointer.hoveredNode = spatial.nearest(pointer.x, pointer.y, 75);
+    pointer.lastHoverCheck = now;
+    pointer.dirty = false;
+  } else if (!pointer.active) {
+    pointer.hoveredNode = -1;
+  }
+
+  pointer.hoveredNode = pointer.active ? spatial.nearest(pointer.x, pointer.y, 75) : -1;
 }
 
 function drawBackground(now) {
@@ -596,6 +606,9 @@ function drawIntro(now) {
       }
       world.introBurstPrimed = true;
     }
+    updateAndDrawPool(1 / 60);
+    return;
+  }
 
     for (let i = 0; i < world.introBurstCache.length; i += 2) {
       const c = world.introBurstCache[i];
@@ -649,6 +662,24 @@ function spawnSignalBurst(mult = 1) {
     );
     edge.signal = Math.min(1, edge.signal + 0.8);
   }
+
+  if (elapsed <= 6) {
+    const p = (elapsed - 4) / 2;
+    drawBackground(now);
+
+    ctx.globalAlpha = clamp(0.2 + p * 0.9, 0, 1);
+    drawEdges(now);
+    drawNodes();
+    ctx.globalAlpha = 1;
+
+    if (elapsed > 5.8 && !world.introDone) {
+      world.introDone = true;
+      document.body.classList.remove("intro-active");
+    }
+    return;
+  }
+
+  world.introDone = true;
 }
 
 let previousNow = performance.now();
