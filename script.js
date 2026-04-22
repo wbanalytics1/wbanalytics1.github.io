@@ -44,6 +44,15 @@ const world = {
   backgroundGradient: null,
   introBurstPrimed: false,
   introBurstCache: [],
+  starAlpha: new Float32Array(44),
+  adaptiveDprTarget: 1,
+  adaptiveDprCurrent: 1,
+  fps: 60,
+  fpsAccum: 0,
+  fpsFrames: 0,
+  fpsLastSampleAt: performance.now(),
+  quality: 1,
+  dprInitialized: false,
 };
 
 const nodes = [];
@@ -122,6 +131,36 @@ const particlePool = {
   free: new Uint16Array(1400),
   freeTop: 1400,
 };
+
+const particleSprites = new Map();
+const particleRenderOrder = new Uint16Array(1400);
+let particleRenderCount = 0;
+
+function makeGlowSprite(hue) {
+  const size = 64;
+  const radius = size / 2;
+  const sprite = document.createElement("canvas");
+  sprite.width = size;
+  sprite.height = size;
+  const gtx = sprite.getContext("2d");
+  const grad = gtx.createRadialGradient(radius, radius, 0, radius, radius, radius);
+  grad.addColorStop(0, `hsla(${hue}, 100%, 80%, 0.95)`);
+  grad.addColorStop(0.35, `hsla(${hue}, 100%, 72%, 0.58)`);
+  grad.addColorStop(1, `hsla(${hue}, 100%, 60%, 0)`);
+  gtx.fillStyle = grad;
+  gtx.fillRect(0, 0, size, size);
+  return sprite;
+}
+
+function getParticleSprite(hue) {
+  const key = ((hue / 8) | 0) * 8;
+  let sprite = particleSprites.get(key);
+  if (!sprite) {
+    sprite = makeGlowSprite(key);
+    particleSprites.set(key, sprite);
+  }
+  return sprite;
+}
 
 for (let i = 0; i < particlePool.max; i += 1) {
   particlePool.free[i] = i;
@@ -216,6 +255,9 @@ function setupNetwork() {
     speed: 0.015 + (i % 7) * 0.004,
     size: 0.8 + (i % 3) * 0.6,
   }));
+  for (let i = 0; i < world.starAlpha.length; i += 1) {
+    world.starAlpha[i] = 0.06 + (i % 5) * 0.012;
+  }
 
   world.backgroundGradient = ctx.createLinearGradient(0, 0, world.w, world.h);
   world.backgroundGradient.addColorStop(0, "#090c20");
@@ -239,7 +281,14 @@ function setupNetwork() {
 function resize() {
   world.w = window.innerWidth;
   world.h = window.innerHeight;
-  world.dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+  world.adaptiveDprTarget = Math.min(window.devicePixelRatio || 1, 1.75);
+  if (!world.dprInitialized) {
+    world.adaptiveDprCurrent = world.adaptiveDprTarget;
+    world.dprInitialized = true;
+  } else {
+    world.adaptiveDprCurrent = Math.min(world.adaptiveDprCurrent, world.adaptiveDprTarget);
+  }
+  world.dpr = world.adaptiveDprCurrent;
 
   canvas.width = Math.floor(world.w * world.dpr);
   canvas.height = Math.floor(world.h * world.dpr);
@@ -381,7 +430,7 @@ function drawBackground(now) {
     const s = world.backgroundStars[i];
     const x = (s.x + now * s.speed) % (world.w + 12) - 6;
     const y = s.y + Math.sin(now * 0.00035 + i) * 6;
-    ctx.fillStyle = `rgba(120,160,255,${0.06 + (i % 5) * 0.012})`;
+    ctx.fillStyle = `rgba(120,160,255,${world.starAlpha[i]})`;
     ctx.beginPath();
     ctx.arc(x, y, s.size, 0, Math.PI * 2);
     ctx.fill();
@@ -470,6 +519,7 @@ function drawNodes() {
 }
 
 function updateAndDrawPool(dt) {
+  particleRenderCount = 0;
   for (let i = 0; i < particlePool.max; i += 1) {
     if (!particlePool.active[i]) continue;
 
@@ -482,16 +532,20 @@ function updateAndDrawPool(dt) {
 
     particlePool.x[i] += particlePool.vx[i] * dt * 60;
     particlePool.y[i] += particlePool.vy[i] * dt * 60;
-
-    const alpha = clamp(particlePool.life[i], 0, 1);
-    ctx.fillStyle = `hsla(${particlePool.hue[i]}, 100%, 72%, ${alpha * 0.9})`;
-    ctx.shadowColor = `hsla(${particlePool.hue[i]}, 100%, 70%, ${alpha})`;
-    ctx.shadowBlur = 10;
-    ctx.beginPath();
-    ctx.arc(particlePool.x[i], particlePool.y[i], particlePool.size[i], 0, Math.PI * 2);
-    ctx.fill();
+    if (particleRenderCount < particleRenderOrder.length) {
+      particleRenderOrder[particleRenderCount++] = i;
+    }
   }
-  ctx.shadowBlur = 0;
+  for (let i = 0; i < particleRenderCount; i += 1) {
+    const pIdx = particleRenderOrder[i];
+    const alpha = clamp(particlePool.life[pIdx], 0, 1);
+    const sprite = getParticleSprite(particlePool.hue[pIdx]);
+    const radius = particlePool.size[pIdx] * 6;
+    const size = radius * 2;
+    ctx.globalAlpha = alpha * 0.9;
+    ctx.drawImage(sprite, particlePool.x[pIdx] - radius, particlePool.y[pIdx] - radius, size, size);
+  }
+  ctx.globalAlpha = 1;
 }
 
 function drawIntro(now) {
@@ -590,10 +644,44 @@ function spawnSignalBurst(mult = 1) {
     );
     edge.signal = Math.min(1, edge.signal + 0.8);
   }
+
+  requestAnimationFrame(tick);
 }
 
 let previousNow = performance.now();
 let paused = false;
+let edgeSkipCounter = 0;
+function applyAdaptiveQuality(now, dt) {
+  world.fpsAccum += 1 / dt;
+  world.fpsFrames += 1;
+  if (now - world.fpsLastSampleAt < 900) return;
+
+  world.fps = world.fpsAccum / Math.max(1, world.fpsFrames);
+  world.fpsAccum = 0;
+  world.fpsFrames = 0;
+  world.fpsLastSampleAt = now;
+
+  const low = world.fps < 52;
+  const high = world.fps > 58;
+  const dprStep = 0.08;
+
+  if (low) {
+    world.quality = Math.max(0.72, world.quality - 0.04);
+    world.adaptiveDprCurrent = Math.max(1, world.adaptiveDprCurrent - dprStep);
+  } else if (high) {
+    world.quality = Math.min(1, world.quality + 0.02);
+    world.adaptiveDprCurrent = Math.min(world.adaptiveDprTarget, world.adaptiveDprCurrent + dprStep);
+  }
+
+  const snappedDpr = Math.round(world.adaptiveDprCurrent * 100) / 100;
+  if (Math.abs(snappedDpr - world.dpr) > 0.04) {
+    world.dpr = snappedDpr;
+    canvas.width = Math.floor(world.w * world.dpr);
+    canvas.height = Math.floor(world.h * world.dpr);
+    ctx.setTransform(world.dpr, 0, 0, world.dpr, 0, 0);
+  }
+}
+
 function tick(now) {
   if (paused) {
     previousNow = now;
@@ -604,6 +692,7 @@ function tick(now) {
   const dt = clamp((now - previousNow) / 1000, 0.001, 0.033);
   previousNow = now;
   world.time = now;
+  applyAdaptiveQuality(now, dt);
 
   updateNodes(dt, now);
   forwardPropagate(now);
@@ -612,11 +701,16 @@ function tick(now) {
     drawIntro(now);
   } else {
     drawBackground(now);
-    drawEdges(now);
+    edgeSkipCounter = (edgeSkipCounter + 1) % 3;
+    if (world.quality > 0.8 || edgeSkipCounter !== 0) {
+      drawEdges(now);
+    } else {
+      drawEdges(now - 8);
+    }
     updateAndDrawPool(dt);
     drawNodes();
 
-    if (Math.random() < 0.04 * settings.complexity) {
+    if (Math.random() < 0.04 * settings.complexity * world.quality) {
       const edge = edges[(Math.random() * edges.length) | 0];
       const a = nodes[edge.from];
       const b = nodes[edge.to];
