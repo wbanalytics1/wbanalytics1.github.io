@@ -69,7 +69,101 @@ body.intro-active .ui-fade {
   margin: 0;
   font-size: clamp(1.25rem, 2.6vw, 2.1rem);
   letter-spacing: 0.03em;
-  text-shadow: 0 0 18px rgba(100, 255, 218, 0.48);
+  position: relative;
+  isolation: isolate;
+}
+
+.title-core {
+  position: relative;
+  display: inline-block;
+  font-weight: 650;
+  line-height: 1.12;
+  color: #eaf4ff;
+  background-image: linear-gradient(118deg, #dff8ff 0%, #7feaff 23%, #6ca9ff 52%, #8f74ff 78%, #f2f9ff 100%);
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 0 10px rgba(123, 191, 255, 0.32),
+    0 0 24px rgba(129, 112, 255, 0.2),
+    0 0 40px rgba(92, 227, 255, 0.16);
+  filter: drop-shadow(0 0 12px rgba(96, 235, 255, 0.16));
+  animation:
+    titleEnergyFlow 11.5s ease-in-out infinite,
+    titlePulse 4.8s ease-in-out infinite;
+}
+
+.title-core::before,
+.title-core::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.title-core::before {
+  color: rgba(210, 238, 255, 0.18);
+  filter: blur(6px);
+  transform: translateZ(0);
+}
+
+.title-core::after {
+  color: transparent;
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.08) 44%, rgba(255, 255, 255, 0.66) 50%, rgba(255, 255, 255, 0.08) 56%, transparent 100%);
+  background-size: 240% 100%;
+  background-repeat: no-repeat;
+  background-position: -180% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  animation: titleShimmer 8.7s ease-in-out infinite;
+}
+
+@keyframes titleEnergyFlow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes titlePulse {
+  0%,
+  100% {
+    text-shadow:
+      0 0 10px rgba(123, 191, 255, 0.3),
+      0 0 22px rgba(129, 112, 255, 0.16),
+      0 0 34px rgba(92, 227, 255, 0.14);
+    filter: drop-shadow(0 0 10px rgba(96, 235, 255, 0.12));
+  }
+  55% {
+    text-shadow:
+      0 0 14px rgba(132, 223, 255, 0.38),
+      0 0 30px rgba(133, 117, 255, 0.28),
+      0 0 46px rgba(96, 234, 255, 0.22);
+    filter: drop-shadow(0 0 16px rgba(110, 240, 255, 0.2));
+  }
+}
+
+@keyframes titleShimmer {
+  0%,
+  58%,
+  100% {
+    opacity: 0;
+    background-position: -180% 50%;
+  }
+  62% {
+    opacity: 0.88;
+  }
+  74% {
+    opacity: 0;
+    background-position: 190% 50%;
+  }
 }
 
 .subtitle {
@@ -213,5 +307,12 @@ select {
 
   .email-btn {
     margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title-core,
+  .title-core::after {
+    animation: none;
   }
 }
