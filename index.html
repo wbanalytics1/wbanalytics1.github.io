@@ -17,7 +17,9 @@
   <main class="app-shell" role="main">
     <section class="hero glass-panel" aria-labelledby="owner-name">
       <p class="hero-kicker">Neural Command Surface</p>
-      <h1 id="owner-name" data-text="William David Boggs">William David Boggs</h1>
+      <h1 id="owner-name" aria-label="William David Boggs">
+        <span class="title-ink" data-text="William David Boggs">William David Boggs</span>
+      </h1>
       <p class="hero-subtitle">Interactive Neural Intelligence Canvas</p>
       <div class="hero-actions">
         <a class="action-btn" href="https://wbanalytics1.github.io/" target="_blank" rel="noopener noreferrer">wbanalytics1.github.io</a>
@@ -53,6 +55,16 @@
   </main>
 
   <footer class="identity-band glass-panel" aria-label="Identity and contact">
+    <a class="bauer-link" href="https://www.bauer.uh.edu/" target="_blank" rel="noopener noreferrer" aria-label="University of Houston Bauer College of Business">
+      <img
+        src="https://www.bauer.uh.edu/includes/images/university-of-houston-bauer-college-business.svg"
+        alt="UH Bauer College of Business"
+        loading="lazy"
+        onerror="this.closest('.bauer-link').classList.add('is-fallback'); this.remove();"
+      />
+      <span class="bauer-fallback">UH Bauer</span>
+    </a>
+
     <div class="logo-cell" aria-hidden="true">
       <svg viewBox="0 0 120 120" role="img">
         <defs>
