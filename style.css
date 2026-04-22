@@ -296,6 +296,16 @@ body {
   filter: drop-shadow(0 0 8px rgba(112, 227, 255, 0.2));
 }
 
+
+.brand-tile--image img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 8px;
+  filter: drop-shadow(0 0 6px rgba(112, 227, 255, 0.24));
+}
+
 .brand-tile span {
   font-size: 0.66rem;
   letter-spacing: 0.05em;
