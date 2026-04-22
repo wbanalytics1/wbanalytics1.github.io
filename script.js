@@ -22,7 +22,15 @@ const settings = {
   trainingMode: false,
 };
 
-const pointer = { x: 0, y: 0, active: false, repel: false, hoveredNode: -1 };
+const pointer = {
+  x: 0,
+  y: 0,
+  active: false,
+  repel: false,
+  hoveredNode: -1,
+  lastHoverCheck: 0,
+  dirty: false,
+};
 
 const networkSpec = [12, 18, 16, 10, 6];
 const world = {
@@ -33,6 +41,9 @@ const world = {
   introStart: performance.now(),
   introDone: false,
   backgroundStars: [],
+  backgroundGradient: null,
+  introBurstPrimed: false,
+  introBurstCache: [],
 };
 
 const nodes = [];
@@ -44,19 +55,26 @@ class SpatialHash {
   constructor(cellSize = 70) {
     this.cellSize = cellSize;
     this.map = new Map();
+    this.activeKeys = [];
   }
 
   clear() {
-    this.map.clear();
+    for (let i = 0; i < this.activeKeys.length; i += 1) {
+      this.map.get(this.activeKeys[i]).length = 0;
+    }
+    this.activeKeys.length = 0;
   }
 
   insert(index, x, y) {
-    const key = `${(x / this.cellSize) | 0},${(y / this.cellSize) | 0}`;
+    const cx = (x / this.cellSize) | 0;
+    const cy = (y / this.cellSize) | 0;
+    const key = cx * 65536 + cy;
     let bucket = this.map.get(key);
     if (!bucket) {
       bucket = [];
       this.map.set(key, bucket);
     }
+    if (!bucket.length) this.activeKeys.push(key);
     bucket.push(index);
   }
 
@@ -68,7 +86,7 @@ class SpatialHash {
 
     for (let ox = -1; ox <= 1; ox += 1) {
       for (let oy = -1; oy <= 1; oy += 1) {
-        const key = `${cx + ox},${cy + oy}`;
+        const key = (cx + ox) * 65536 + (cy + oy);
         const bucket = this.map.get(key);
         if (!bucket) continue;
 
@@ -101,21 +119,25 @@ const particlePool = {
   life: new Float32Array(1400),
   hue: new Float32Array(1400),
   active: new Uint8Array(1400),
+  free: new Uint16Array(1400),
+  freeTop: 1400,
 };
 
+for (let i = 0; i < particlePool.max; i += 1) {
+  particlePool.free[i] = i;
+}
+
 function spawnPoolParticle(x, y, vx, vy, life, size, hue = 180) {
-  for (let i = 0; i < particlePool.max; i += 1) {
-    if (particlePool.active[i]) continue;
-    particlePool.active[i] = 1;
-    particlePool.x[i] = x;
-    particlePool.y[i] = y;
-    particlePool.vx[i] = vx;
-    particlePool.vy[i] = vy;
-    particlePool.life[i] = life;
-    particlePool.size[i] = size;
-    particlePool.hue[i] = hue;
-    return;
-  }
+  if (!particlePool.freeTop) return;
+  const i = particlePool.free[--particlePool.freeTop];
+  particlePool.active[i] = 1;
+  particlePool.x[i] = x;
+  particlePool.y[i] = y;
+  particlePool.vx[i] = vx;
+  particlePool.vy[i] = vy;
+  particlePool.life[i] = life;
+  particlePool.size[i] = size;
+  particlePool.hue[i] = hue;
 }
 
 function activation(x) {
@@ -194,12 +216,30 @@ function setupNetwork() {
     speed: 0.015 + (i % 7) * 0.004,
     size: 0.8 + (i % 3) * 0.6,
   }));
+
+  world.backgroundGradient = ctx.createLinearGradient(0, 0, world.w, world.h);
+  world.backgroundGradient.addColorStop(0, "#090c20");
+  world.backgroundGradient.addColorStop(0.65, "#070916");
+  world.backgroundGradient.addColorStop(1, "#04050d");
+
+  world.introBurstCache = Array.from({ length: 260 }, (_, i) => {
+    const ang = (i / 260) * Math.PI * 2;
+    const jitter = 1 + (i % 11) * 0.02;
+    return {
+      cos: Math.cos(ang),
+      sin: Math.sin(ang),
+      radiusJitter: jitter,
+      hue: 200 + (i % 58),
+      speed: 0.11 + (i % 7) * 0.008,
+    };
+  });
+  world.introBurstPrimed = false;
 }
 
 function resize() {
   world.w = window.innerWidth;
   world.h = window.innerHeight;
-  world.dpr = Math.min(window.devicePixelRatio || 1, 2);
+  world.dpr = Math.min(window.devicePixelRatio || 1, 1.75);
 
   canvas.width = Math.floor(world.w * world.dpr);
   canvas.height = Math.floor(world.h * world.dpr);
@@ -211,6 +251,7 @@ function resize() {
 }
 
 let lastForwardAt = 0;
+const edgeNoise = new Float32Array(760);
 function forwardPropagate(now) {
   if (now - lastForwardAt < 70) return;
   lastForwardAt = now;
@@ -272,7 +313,7 @@ function forwardPropagate(now) {
 
     for (let i = 0; i < edges.length; i += 1) {
       const edge = edges[i];
-      const delta = (Math.random() - 0.5) * settings.learningRate * 0.04;
+      const delta = edgeNoise[i] * settings.learningRate * 0.04;
       edge.weight = clamp(edge.weight + delta, -1.5, 1.5);
     }
   }
@@ -321,15 +362,19 @@ function updateNodes(dt, now) {
     spatial.insert(i, n.px, n.py);
   }
 
+  if (pointer.active && (now - pointer.lastHoverCheck > 40 || pointer.dirty)) {
+    pointer.hoveredNode = spatial.nearest(pointer.x, pointer.y, 75);
+    pointer.lastHoverCheck = now;
+    pointer.dirty = false;
+  } else if (!pointer.active) {
+    pointer.hoveredNode = -1;
+  }
+
   pointer.hoveredNode = pointer.active ? spatial.nearest(pointer.x, pointer.y, 75) : -1;
 }
 
 function drawBackground(now) {
-  const bg = ctx.createLinearGradient(0, 0, world.w, world.h);
-  bg.addColorStop(0, "#090c20");
-  bg.addColorStop(0.65, "#070916");
-  bg.addColorStop(1, "#04050d");
-  ctx.fillStyle = bg;
+  ctx.fillStyle = world.backgroundGradient;
   ctx.fillRect(0, 0, world.w, world.h);
 
   for (let i = 0; i < world.backgroundStars.length; i += 1) {
@@ -431,6 +476,7 @@ function updateAndDrawPool(dt) {
     particlePool.life[i] -= dt * 1.35;
     if (particlePool.life[i] <= 0) {
       particlePool.active[i] = 0;
+      particlePool.free[particlePool.freeTop++] = i;
       continue;
     }
 
@@ -473,12 +519,36 @@ function drawIntro(now) {
 
     const cx = world.w * 0.5;
     const cy = world.h * 0.5;
-    for (let i = 0; i < 240; i += 1) {
-      const ang = (i / 240) * Math.PI * 2;
-      const r = p * (world.w * 0.46 + (i % 12) * 4);
-      const x = cx + Math.cos(ang) * r;
-      const y = cy + Math.sin(ang) * r;
-      spawnPoolParticle(x, y, Math.cos(ang) * 0.15, Math.sin(ang) * 0.15, 0.2, 1.8, 200 + (i % 60));
+    if (!world.introBurstPrimed) {
+      for (let i = 0; i < world.introBurstCache.length; i += 1) {
+        const c = world.introBurstCache[i];
+        spawnPoolParticle(
+          cx + c.cos * 2,
+          cy + c.sin * 2,
+          c.cos * c.speed,
+          c.sin * c.speed,
+          2.2,
+          1.7,
+          c.hue,
+        );
+      }
+      world.introBurstPrimed = true;
+    }
+    updateAndDrawPool(1 / 60);
+    return;
+  }
+
+    for (let i = 0; i < world.introBurstCache.length; i += 2) {
+      const c = world.introBurstCache[i];
+      spawnPoolParticle(
+        cx + c.cos * p * (world.w * 0.06 * c.radiusJitter),
+        cy + c.sin * p * (world.w * 0.06 * c.radiusJitter),
+        c.cos * c.speed * 0.5,
+        c.sin * c.speed * 0.5,
+        0.18,
+        1.5,
+        c.hue,
+      );
     }
     updateAndDrawPool(1 / 60);
     return;
@@ -523,7 +593,14 @@ function spawnSignalBurst(mult = 1) {
 }
 
 let previousNow = performance.now();
+let paused = false;
 function tick(now) {
+  if (paused) {
+    previousNow = now;
+    requestAnimationFrame(tick);
+    return;
+  }
+
   const dt = clamp((now - previousNow) / 1000, 0.001, 0.033);
   previousNow = now;
   world.time = now;
@@ -539,7 +616,7 @@ function tick(now) {
     updateAndDrawPool(dt);
     drawNodes();
 
-    if (Math.random() < 0.05 * settings.complexity) {
+    if (Math.random() < 0.04 * settings.complexity) {
       const edge = edges[(Math.random() * edges.length) | 0];
       const a = nodes[edge.from];
       const b = nodes[edge.to];
@@ -562,7 +639,8 @@ canvas.addEventListener("pointermove", (event) => {
   pointer.x = event.clientX;
   pointer.y = event.clientY;
   pointer.active = true;
-});
+  pointer.dirty = true;
+}, { passive: true });
 
 canvas.addEventListener("pointerleave", () => {
   pointer.active = false;
@@ -573,6 +651,7 @@ canvas.addEventListener("pointerdown", (event) => {
   pointer.x = event.clientX;
   pointer.y = event.clientY;
   pointer.active = true;
+  pointer.dirty = true;
   spawnSignalBurst(1.5);
 });
 
@@ -625,11 +704,24 @@ emailBtn.addEventListener("click", async () => {
   }
 });
 
+let resizeQueued = false;
 window.addEventListener("resize", () => {
-  resize();
-  buildEdgeIndex();
+  if (resizeQueued) return;
+  resizeQueued = true;
+  requestAnimationFrame(() => {
+    resizeQueued = false;
+    resize();
+    buildEdgeIndex();
+  });
+}, { passive: true });
+
+document.addEventListener("visibilitychange", () => {
+  paused = document.hidden;
 });
 
 resize();
 buildEdgeIndex();
+for (let i = 0; i < edgeNoise.length; i += 1) {
+  edgeNoise[i] = Math.random() - 0.5;
+}
 requestAnimationFrame(tick);
