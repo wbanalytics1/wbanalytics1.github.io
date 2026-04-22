@@ -418,6 +418,8 @@ function updateNodes(dt, now) {
   } else if (!pointer.active) {
     pointer.hoveredNode = -1;
   }
+
+  pointer.hoveredNode = pointer.active ? spatial.nearest(pointer.x, pointer.y, 75) : -1;
 }
 
 function drawBackground(now) {
@@ -586,6 +588,9 @@ function drawIntro(now) {
       }
       world.introBurstPrimed = true;
     }
+    updateAndDrawPool(1 / 60);
+    return;
+  }
 
     for (let i = 0; i < world.introBurstCache.length; i += 2) {
       const c = world.introBurstCache[i];
@@ -639,6 +644,8 @@ function spawnSignalBurst(mult = 1) {
     );
     edge.signal = Math.min(1, edge.signal + 0.8);
   }
+
+  requestAnimationFrame(tick);
 }
 
 let previousNow = performance.now();
