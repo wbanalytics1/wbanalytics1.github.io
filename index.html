@@ -55,29 +55,52 @@
   </main>
 
   <footer class="identity-band glass-panel" aria-label="Identity and contact">
-    <a class="bauer-link" href="https://www.bauer.uh.edu/" target="_blank" rel="noopener noreferrer" aria-label="University of Houston Bauer College of Business">
-      <img
-        src="https://www.bauer.uh.edu/includes/images/university-of-houston-bauer-college-business.svg"
-        alt="UH Bauer College of Business"
-        loading="lazy"
-        onerror="this.closest('.bauer-link').classList.add('is-fallback'); this.remove();"
-      />
-      <span class="bauer-fallback">UH Bauer</span>
-    </a>
+    <div class="brand-dock" aria-label="Affiliations and brands">
+      <a class="brand-tile" href="https://www.uh.edu/" target="_blank" rel="noopener noreferrer" aria-label="University of Houston">
+        <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+          <defs>
+            <linearGradient id="uh-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#8fe8ff" />
+              <stop offset="1" stop-color="#6f87ff" />
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="108" height="108" rx="24" fill="#0a1227" stroke="url(#uh-grad)" stroke-width="4" />
+          <path d="M28 36 V84 H44 V64 H76 V84 H92 V36 H76 V50 H44 V36 Z" fill="url(#uh-grad)" />
+        </svg>
+        <span>UH</span>
+      </a>
 
-    <div class="logo-cell" aria-hidden="true">
-      <svg viewBox="0 0 120 120" role="img">
-        <defs>
-          <linearGradient id="logo-grad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#6ce9ff" />
-            <stop offset="1" stop-color="#7e78ff" />
-          </linearGradient>
-        </defs>
-        <circle cx="60" cy="60" r="52" fill="#0a1024" stroke="url(#logo-grad)" stroke-width="5" />
-        <path d="M22 40 L33 83 L49 50 L60 83 L75 40" fill="none" stroke="url(#logo-grad)" stroke-linecap="round" stroke-linejoin="round" stroke-width="8" />
-        <circle cx="92" cy="40" r="8" fill="#95f5ff" opacity="0.9" />
-      </svg>
+      <a class="brand-tile" href="https://www.bauer.uh.edu/" target="_blank" rel="noopener noreferrer" aria-label="UH Bauer College of Business">
+        <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+          <defs>
+            <linearGradient id="bauer-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#77f2ff" />
+              <stop offset="1" stop-color="#8b78ff" />
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="108" height="108" rx="24" fill="#0b1329" stroke="url(#bauer-grad)" stroke-width="4" />
+          <path d="M34 32 H62 C73 32 80 39 80 48 C80 55 76 61 69 63 C77 65 83 71 83 80 C83 91 74 99 61 99 H34 Z M49 45 V58 H60 C63 58 65 56 65 52 C65 48 63 45 59 45 Z M49 71 V86 H61 C65 86 68 83 68 78 C68 74 65 71 61 71 Z" fill="url(#bauer-grad)" />
+        </svg>
+        <span>Bauer</span>
+      </a>
+
+      <a class="brand-tile" href="https://wbanalytics.dev" target="_blank" rel="noopener noreferrer" aria-label="WBAnalytics">
+        <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+          <defs>
+            <linearGradient id="wba-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#7bf4ff" />
+              <stop offset="1" stop-color="#8f7dff" />
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="108" height="108" rx="24" fill="#0a132a" stroke="url(#wba-grad)" stroke-width="4" />
+          <path d="M24 40 L34 82 L48 52 L60 82 L74 40" fill="none" stroke="url(#wba-grad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M75 79 L90 47 L102 79" fill="none" stroke="#d9f2ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="92" cy="34" r="6" fill="#9ff7ff" />
+        </svg>
+        <span>WBAnalytics</span>
+      </a>
     </div>
+
     <a href="https://wbanalytics.dev" target="_blank" rel="noopener noreferrer" class="band-link">wbanalytics.dev</a>
     <a href="mailto:david@wbanalytics.dev" class="band-mail">david@wbanalytics.dev</a>
   </footer>
