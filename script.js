@@ -13,22 +13,22 @@ const toast = document.getElementById("toast");
 
 const failSafeRevealUI = () => {
   document.body.classList.remove("intro-active");
-  window.__nnBooted = false;
+  window.__nnBooted = true;
 };
 
 if (!canvas || !ctx) {
   failSafeRevealUI();
-  throw new Error("Neural canvas failed to initialize: missing #nnCanvas or 2D context.");
-}
+  console.error("Neural canvas disabled: missing #nnCanvas or 2D context.");
+} else {
 
 const easeOutExpo = (x) => (x === 1 ? 1 : 1 - 2 ** (-10 * x));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 const settings = {
-  complexity: Number(complexityInput?.value ?? 1.2),
-  tempo: Number(tempoInput?.value ?? 1.2),
-  learningRate: Number(learningRateInput?.value ?? 0.03),
-  activationFn: activationFnInput?.value || "sigmoid",
+  complexity: Number(complexityInput ? complexityInput.value : 1.2),
+  tempo: Number(tempoInput ? tempoInput.value : 1.2),
+  learningRate: Number(learningRateInput ? learningRateInput.value : 0.03),
+  activationFn: activationFnInput ? activationFnInput.value : "sigmoid",
   trainingMode: false,
 };
 
@@ -429,6 +429,14 @@ function updateNodes(dt, now) {
     pointer.hoveredNode = -1;
   }
 
+  if (pointer.active && (now - pointer.lastHoverCheck > 40 || pointer.dirty)) {
+    pointer.hoveredNode = spatial.nearest(pointer.x, pointer.y, 75);
+    pointer.lastHoverCheck = now;
+    pointer.dirty = false;
+  } else if (!pointer.active) {
+    pointer.hoveredNode = -1;
+  }
+
   pointer.hoveredNode = pointer.active ? spatial.nearest(pointer.x, pointer.y, 75) : -1;
 }
 
@@ -654,6 +662,24 @@ function spawnSignalBurst(mult = 1) {
     );
     edge.signal = Math.min(1, edge.signal + 0.8);
   }
+
+  if (elapsed <= 6) {
+    const p = (elapsed - 4) / 2;
+    drawBackground(now);
+
+    ctx.globalAlpha = clamp(0.2 + p * 0.9, 0, 1);
+    drawEdges(now);
+    drawNodes();
+    ctx.globalAlpha = 1;
+
+    if (elapsed > 5.8 && !world.introDone) {
+      world.introDone = true;
+      document.body.classList.remove("intro-active");
+    }
+    return;
+  }
+
+  world.introDone = true;
 }
 
 let previousNow = performance.now();
@@ -845,3 +871,4 @@ for (let i = 0; i < edgeNoise.length; i += 1) {
 }
 window.__nnBooted = true;
 requestAnimationFrame(tick);
+}
