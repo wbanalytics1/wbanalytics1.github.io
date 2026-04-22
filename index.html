@@ -78,6 +78,14 @@
     <span id="toast" role="status" aria-live="polite"></span>
   </footer>
 
+  <script>
+    window.__nnBooted = false;
+    window.setTimeout(() => {
+      if (!window.__nnBooted) {
+        document.body.classList.remove("intro-active");
+      }
+    }, 2400);
+  </script>
   <script src="script.js"></script>
 </body>
 </html>

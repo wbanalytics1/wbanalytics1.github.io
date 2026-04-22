@@ -1,5 +1,5 @@
 const canvas = document.getElementById("nnCanvas");
-const ctx = canvas.getContext("2d", { alpha: false });
+const ctx = canvas ? canvas.getContext("2d", { alpha: false }) : null;
 
 const complexityInput = document.getElementById("complexity");
 const tempoInput = document.getElementById("tempo");
@@ -11,14 +11,24 @@ const burstBtn = document.getElementById("burst");
 const emailBtn = document.getElementById("copyEmail");
 const toast = document.getElementById("toast");
 
+const failSafeRevealUI = () => {
+  document.body.classList.remove("intro-active");
+  window.__nnBooted = false;
+};
+
+if (!canvas || !ctx) {
+  failSafeRevealUI();
+  throw new Error("Neural canvas failed to initialize: missing #nnCanvas or 2D context.");
+}
+
 const easeOutExpo = (x) => (x === 1 ? 1 : 1 - 2 ** (-10 * x));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 const settings = {
-  complexity: Number(complexityInput.value),
-  tempo: Number(tempoInput.value),
-  learningRate: Number(learningRateInput.value),
-  activationFn: activationFnInput.value,
+  complexity: Number(complexityInput?.value ?? 1.2),
+  tempo: Number(tempoInput?.value ?? 1.2),
+  learningRate: Number(learningRateInput?.value ?? 0.03),
+  activationFn: activationFnInput?.value || "sigmoid",
   trainingMode: false,
 };
 
@@ -644,8 +654,6 @@ function spawnSignalBurst(mult = 1) {
     );
     edge.signal = Math.min(1, edge.signal + 0.8);
   }
-
-  requestAnimationFrame(tick);
 }
 
 let previousNow = performance.now();
@@ -722,6 +730,7 @@ function tick(now) {
 }
 
 function showToast(message) {
+  if (!toast) return;
   toast.textContent = message;
   clearTimeout(showToast._timer);
   showToast._timer = setTimeout(() => {
@@ -749,54 +758,70 @@ canvas.addEventListener("pointerdown", (event) => {
   spawnSignalBurst(1.5);
 });
 
-complexityInput.addEventListener("input", () => {
-  settings.complexity = Number(complexityInput.value);
-});
+if (complexityInput) {
+  complexityInput.addEventListener("input", () => {
+    settings.complexity = Number(complexityInput.value);
+  });
+}
 
-tempoInput.addEventListener("input", () => {
-  settings.tempo = Number(tempoInput.value);
-});
+if (tempoInput) {
+  tempoInput.addEventListener("input", () => {
+    settings.tempo = Number(tempoInput.value);
+  });
+}
 
-learningRateInput.addEventListener("input", () => {
-  settings.learningRate = Number(learningRateInput.value);
-});
+if (learningRateInput) {
+  learningRateInput.addEventListener("input", () => {
+    settings.learningRate = Number(learningRateInput.value);
+  });
+}
 
-activationFnInput.addEventListener("change", () => {
-  settings.activationFn = activationFnInput.value;
-});
+if (activationFnInput) {
+  activationFnInput.addEventListener("change", () => {
+    settings.activationFn = activationFnInput.value;
+  });
+}
 
-trainingModeBtn.addEventListener("click", () => {
-  settings.trainingMode = !settings.trainingMode;
-  trainingModeBtn.textContent = `Training: ${settings.trainingMode ? "On" : "Off"}`;
-  trainingModeBtn.setAttribute("aria-pressed", String(settings.trainingMode));
-});
+if (trainingModeBtn) {
+  trainingModeBtn.addEventListener("click", () => {
+    settings.trainingMode = !settings.trainingMode;
+    trainingModeBtn.textContent = `Training: ${settings.trainingMode ? "On" : "Off"}`;
+    trainingModeBtn.setAttribute("aria-pressed", String(settings.trainingMode));
+  });
+}
 
-fieldModeBtn.addEventListener("click", () => {
-  pointer.repel = !pointer.repel;
-  fieldModeBtn.textContent = `Field: ${pointer.repel ? "Repel" : "Attract"}`;
-  fieldModeBtn.setAttribute("aria-pressed", String(pointer.repel));
-});
+if (fieldModeBtn) {
+  fieldModeBtn.addEventListener("click", () => {
+    pointer.repel = !pointer.repel;
+    fieldModeBtn.textContent = `Field: ${pointer.repel ? "Repel" : "Attract"}`;
+    fieldModeBtn.setAttribute("aria-pressed", String(pointer.repel));
+  });
+}
 
-burstBtn.addEventListener("click", () => spawnSignalBurst(2));
+if (burstBtn) {
+  burstBtn.addEventListener("click", () => spawnSignalBurst(2));
+}
 
-emailBtn.addEventListener("click", async () => {
-  const value = "david@wbanalytics.dev";
-  try {
-    await navigator.clipboard.writeText(value);
-    showToast("Email copied ✔");
-  } catch {
-    const helper = document.createElement("textarea");
-    helper.value = value;
-    helper.setAttribute("readonly", "");
-    helper.style.position = "absolute";
-    helper.style.left = "-9999px";
-    document.body.appendChild(helper);
-    helper.select();
-    document.execCommand("copy");
-    helper.remove();
-    showToast("Email copied ✔");
-  }
-});
+if (emailBtn) {
+  emailBtn.addEventListener("click", async () => {
+    const value = "david@wbanalytics.dev";
+    try {
+      await navigator.clipboard.writeText(value);
+      showToast("Email copied ✔");
+    } catch {
+      const helper = document.createElement("textarea");
+      helper.value = value;
+      helper.setAttribute("readonly", "");
+      helper.style.position = "absolute";
+      helper.style.left = "-9999px";
+      document.body.appendChild(helper);
+      helper.select();
+      document.execCommand("copy");
+      helper.remove();
+      showToast("Email copied ✔");
+    }
+  });
+}
 
 let resizeQueued = false;
 window.addEventListener("resize", () => {
@@ -818,4 +843,5 @@ buildEdgeIndex();
 for (let i = 0; i < edgeNoise.length; i += 1) {
   edgeNoise[i] = Math.random() - 0.5;
 }
+window.__nnBooted = true;
 requestAnimationFrame(tick);
