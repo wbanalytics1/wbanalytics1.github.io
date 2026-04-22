@@ -3,89 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>William David Boggs | Neural Art Engine</title>
+  <meta name="description" content="William David Boggs — Interactive Neural Intelligence Canvas" />
+  <title>William David Boggs | Interactive Neural Intelligence Canvas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="intro-active">
-  <canvas id="nnCanvas" aria-label="Interactive neural network animation"></canvas>
+<body>
+  <div class="static-fallback-bg" aria-hidden="true"></div>
+  <canvas id="neural-canvas" aria-hidden="true"></canvas>
 
-  <header class="hud ui-fade">
-    <div class="identity">
-      <h1 id="title" aria-label="William David Boggs">
-        <span class="title-core" data-text="William David Boggs">William David Boggs</span>
+  <main class="app-shell" role="main">
+    <section class="hero glass-panel" aria-labelledby="owner-name">
+      <p class="hero-kicker">Neural Command Surface</p>
+      <h1 id="owner-name" aria-label="William David Boggs">
+        <span class="title-ink" data-text="William David Boggs">William David Boggs</span>
       </h1>
-      <p class="subtitle">Interactive Neural Intelligence Canvas</p>
-      <div class="links">
-        <a href="https://wbanalytics1.github.io/" target="_blank" rel="noopener noreferrer">wbanalytics1.github.io</a>
-        <a href="https://github.com/wbanalytics1" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+      <p class="hero-subtitle">Interactive Neural Intelligence Canvas</p>
+      <div class="hero-actions">
+        <a class="action-btn" href="https://wbanalytics1.github.io/" target="_blank" rel="noopener noreferrer">wbanalytics1.github.io</a>
+        <a class="action-btn secondary" href="https://github.com/wbanalytics1" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
       </div>
+    </section>
+
+    <aside class="control-panel glass-panel" aria-label="Neural visual controls">
+      <h2>System Controls</h2>
+
+      <label for="density">Visual Density <span id="density-value">1.00</span></label>
+      <input id="density" type="range" min="0.6" max="1.6" step="0.05" value="1" />
+
+      <label for="tempo">Signal Tempo <span id="tempo-value">1.00</span></label>
+      <input id="tempo" type="range" min="0.5" max="2" step="0.05" value="1" />
+
+      <label for="learning">Learning Rate (visual) <span id="learning-value">0.04</span></label>
+      <input id="learning" type="range" min="0.01" max="0.12" step="0.005" value="0.04" />
+
+      <label for="activation">Activation Function</label>
+      <select id="activation">
+        <option value="sigmoid">Sigmoid</option>
+        <option value="relu">ReLU</option>
+        <option value="tanh">Tanh</option>
+      </select>
+
+      <div class="control-actions">
+        <button id="training-toggle" type="button" aria-pressed="false">Training: Off</button>
+        <button id="field-toggle" type="button" aria-pressed="false">Field: Attract</button>
+        <button id="signal-burst" type="button">Signal Burst</button>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="identity-band glass-panel" aria-label="Identity and contact">
+    <div class="brand-dock" aria-label="Affiliations and brands">
+      <a class="brand-tile" href="https://www.uh.edu/" target="_blank" rel="noopener noreferrer" aria-label="University of Houston">
+        <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+          <defs>
+            <linearGradient id="uh-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#8fe8ff" />
+              <stop offset="1" stop-color="#6f87ff" />
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="108" height="108" rx="24" fill="#0a1227" stroke="url(#uh-grad)" stroke-width="4" />
+          <path d="M28 36 V84 H44 V64 H76 V84 H92 V36 H76 V50 H44 V36 Z" fill="url(#uh-grad)" />
+        </svg>
+        <span>UH</span>
+      </a>
+
+      <a class="brand-tile" href="https://www.bauer.uh.edu/" target="_blank" rel="noopener noreferrer" aria-label="UH Bauer College of Business">
+        <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+          <defs>
+            <linearGradient id="bauer-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#77f2ff" />
+              <stop offset="1" stop-color="#8b78ff" />
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="108" height="108" rx="24" fill="#0b1329" stroke="url(#bauer-grad)" stroke-width="4" />
+          <path d="M34 32 H62 C73 32 80 39 80 48 C80 55 76 61 69 63 C77 65 83 71 83 80 C83 91 74 99 61 99 H34 Z M49 45 V58 H60 C63 58 65 56 65 52 C65 48 63 45 59 45 Z M49 71 V86 H61 C65 86 68 83 68 78 C68 74 65 71 61 71 Z" fill="url(#bauer-grad)" />
+        </svg>
+        <span>Bauer</span>
+      </a>
+
+      <a class="brand-tile" href="https://wbanalytics.dev" target="_blank" rel="noopener noreferrer" aria-label="WBAnalytics">
+        <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+          <defs>
+            <linearGradient id="wba-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#7bf4ff" />
+              <stop offset="1" stop-color="#8f7dff" />
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="108" height="108" rx="24" fill="#0a132a" stroke="url(#wba-grad)" stroke-width="4" />
+          <path d="M24 40 L34 82 L48 52 L60 82 L74 40" fill="none" stroke="url(#wba-grad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M75 79 L90 47 L102 79" fill="none" stroke="#d9f2ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="92" cy="34" r="6" fill="#9ff7ff" />
+        </svg>
+        <span>WBAnalytics</span>
+      </a>
     </div>
 
-    <div class="control-panel" aria-label="Neural simulation controls">
-      <label>
-        Visual Density
-        <input id="complexity" type="range" min="0.8" max="2" step="0.1" value="1.2" />
-      </label>
-      <label>
-        Signal Tempo
-        <input id="tempo" type="range" min="0.5" max="2.5" step="0.1" value="1.2" />
-      </label>
-      <label>
-        Learning Rate (visual)
-        <input id="learningRate" type="range" min="0" max="0.2" step="0.005" value="0.03" />
-      </label>
-      <label>
-        Activation Function
-        <select id="activationFn">
-          <option value="sigmoid" selected>Sigmoid</option>
-          <option value="relu">ReLU</option>
-          <option value="tanh">tanh</option>
-        </select>
-      </label>
-      <button id="trainingMode" type="button" aria-pressed="false">Training: Off</button>
-      <button id="fieldMode" type="button" aria-pressed="false">Field: Attract</button>
-      <button id="burst" type="button">Signal Burst</button>
-    </div>
-  </header>
-
-  <footer class="dock ui-fade">
-    <a href="https://www.bauer.uh.edu/" target="_blank" rel="noopener noreferrer" class="logo-link bauer-link" aria-label="Visit Bauer College">
-      <img
-        src="https://www.bauer.uh.edu/images/homepage/latest-news/UH_Bauer_University_of_Houston_Stock_Photos_Bauer_Buildings_Melcher_Hall_ArchtiecturensPhotos-featured.jpg"
-        id="bauer-logo"
-        alt="Bauer College Building"
-      />
-    </a>
-
-    <a href="https://wbanalytics.dev" target="_blank" rel="noopener noreferrer" class="logo-link wb-link" aria-label="Visit wbanalytics.dev">
-      <svg id="wba-logo" viewBox="0 0 120 120" role="img" aria-label="wbanalytics logo">
-        <defs>
-          <linearGradient id="wbGrad" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stop-color="#64ffda" />
-            <stop offset="100%" stop-color="#7b61ff" />
-          </linearGradient>
-        </defs>
-        <circle cx="60" cy="60" r="53" fill="#0e1433" stroke="url(#wbGrad)" stroke-width="6" />
-        <path d="M24 37 L34 83 L49 53 L60 83 L75 37" fill="none" stroke="url(#wbGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M73 76 L90 43 L103 76" fill="none" stroke="#f5f7ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>wbanalytics.dev</span>
-    </a>
-
-    <button id="copyEmail" class="email-btn" type="button" title="Copy david@wbanalytics.dev to clipboard">
-      david@wbanalytics.dev
-    </button>
-    <span id="toast" role="status" aria-live="polite"></span>
+    <a href="https://wbanalytics.dev" target="_blank" rel="noopener noreferrer" class="band-link">wbanalytics.dev</a>
+    <a href="mailto:david@wbanalytics.dev" class="band-mail">david@wbanalytics.dev</a>
   </footer>
 
-  <script>
-    window.__nnBooted = false;
-    window.setTimeout(() => {
-      if (!window.__nnBooted) {
-        document.body.classList.remove("intro-active");
-      }
-    }, 2400);
-  </script>
-  <script src="script.js"></script>
+  <noscript>
+    <style>
+      #neural-canvas { display: none; }
+    </style>
+  </noscript>
+  <script src="script.js" defer></script>
 </body>
 </html>
