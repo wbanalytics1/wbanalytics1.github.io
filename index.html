@@ -2,22 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Neural Network Animation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>William David Boggs | Neural Art Engine</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1 id="title">William David Boggs</h1>
-  <canvas id="nnCanvas"></canvas>
+  <canvas id="nnCanvas" aria-label="Interactive neural network animation"></canvas>
 
-  <!-- CT Bauer Logo -->
-  <a href="https://www.bauer.uh.edu/" target="_blank">
-    <img 
-      src="https://www.bauer.uh.edu/images/homepage/latest-news/UH_Bauer_University_of_Houston_Stock_Photos_Bauer_Buildings_Melcher_Hall_ArchtiecturensPhotos-featured.jpg" 
-      id="bauer-logo" 
-      alt="Bauer College Building"
-    />
-  </a>
+  <header class="hud">
+    <div class="identity">
+      <h1 id="title">William David Boggs</h1>
+      <p class="subtitle">Interactive Neural Intelligence Canvas</p>
+      <div class="links">
+        <a href="https://wbanalytics1.github.io/" target="_blank" rel="noopener noreferrer">wbanalytics1.github.io</a>
+        <a href="https://github.com/wbanalytics1" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+      </div>
+    </div>
+
+    <div class="control-panel" aria-label="Animation controls">
+      <label>
+        Complexity
+        <input id="complexity" type="range" min="0.7" max="1.8" step="0.1" value="1.2" />
+      </label>
+      <label>
+        Tempo
+        <input id="tempo" type="range" min="0.4" max="2.4" step="0.1" value="1.3" />
+      </label>
+      <button id="fieldMode" type="button" aria-pressed="false">Field: Attract</button>
+      <button id="burst" type="button">Neural Burst</button>
+    </div>
+  </header>
+
+  <footer class="dock">
+    <a href="https://www.bauer.uh.edu/" target="_blank" rel="noopener noreferrer" class="logo-link bauer-link" aria-label="Visit Bauer College">
+      <img
+        src="https://www.bauer.uh.edu/images/homepage/latest-news/UH_Bauer_University_of_Houston_Stock_Photos_Bauer_Buildings_Melcher_Hall_ArchtiecturensPhotos-featured.jpg"
+        id="bauer-logo"
+        alt="Bauer College Building"
+      />
+    </a>
+
+    <a href="https://wbanalytics.dev" target="_blank" rel="noopener noreferrer" class="logo-link wb-link" aria-label="Visit wbanalytics.dev">
+      <svg id="wba-logo" viewBox="0 0 120 120" role="img" aria-label="wbanalytics logo">
+        <defs>
+          <linearGradient id="wbGrad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#64ffda" />
+            <stop offset="100%" stop-color="#7b61ff" />
+          </linearGradient>
+        </defs>
+        <circle cx="60" cy="60" r="53" fill="#0e1433" stroke="url(#wbGrad)" stroke-width="6" />
+        <path d="M24 37 L34 83 L49 53 L60 83 L75 37" fill="none" stroke="url(#wbGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M73 76 L90 43 L103 76" fill="none" stroke="#f5f7ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>wbanalytics.dev</span>
+    </a>
+
+    <button id="copyEmail" class="email-btn" type="button" title="Copy david@wbanalytics.dev to clipboard">
+      david@wbanalytics.dev
+    </button>
+    <span id="toast" role="status" aria-live="polite"></span>
+  </footer>
 
   <script src="script.js"></script>
 </body>
