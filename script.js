@@ -470,6 +470,8 @@ if (!canvas || !ctx) {
         ctx.stroke();
       }
     }
+    return;
+  }
 
     ctx.shadowBlur = 0;
   }
