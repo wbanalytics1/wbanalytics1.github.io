@@ -271,6 +271,13 @@ body::after {
     letter-spacing: 0.24em;
   }
 
+  .coming-soon-hero__subtitle {
+    width: min(100%, 36rem);
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+  }
+
   .taco-braza-lockup {
     gap: 0.64rem;
     margin-top: 1.3rem;
