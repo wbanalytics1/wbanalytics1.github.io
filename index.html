@@ -3,48 +3,150 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Taco Braza is coming soon to El Paso with Sinaloa-style tacos and bold borderland flavor." />
-  <title>Taco Braza | Coming Soon to El Paso</title>
+  <meta
+    name="description"
+    content="WBAnalytics is William Boggs' professional portfolio for MIS systems, big data analytics, cloud-ready AI design, databases, transaction systems, and secure infrastructure."
+  />
+  <title>WBAnalytics | William Boggs Systems Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="coming-soon-page" role="main">
-    <section class="coming-soon-hero" aria-labelledby="coming-soon-title">
-      <div class="hero-ember hero-ember--left" aria-hidden="true"></div>
-      <div class="hero-ember hero-ember--right" aria-hidden="true"></div>
+  <main class="app-shell" id="top">
+    <div class="background-field" aria-hidden="true"></div>
 
-      <div class="coming-soon-hero__content">
-        <p class="coming-soon-hero__eyebrow">Coming soon to</p>
+    <nav class="nav-bar" aria-label="Primary navigation">
+      <a class="brand-lockup" href="#top" aria-label="WBAnalytics home">
+        <span class="brand-lockup__mark">WBA</span>
+        <span class="brand-lockup__text">
+          <span class="brand-lockup__name">WBAnalytics</span>
+          <span class="brand-lockup__subtitle">Systems • Big Data • Cloud • AI • Security</span>
+        </span>
+      </a>
 
-        <h1 id="coming-soon-title" class="sr-only">Taco Braza is coming soon to El Paso</h1>
+      <div class="nav-bar__links">
+        <a href="#projects">Projects</a>
+        <a href="#systems">Systems</a>
+        <a href="https://github.com/wbanalytics1" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="mailto:william@wbanalytics.com">Contact</a>
+      </div>
+    </nav>
 
-        <div class="coming-soon-wordmark-wrap" aria-hidden="false">
-          <img
-            class="coming-soon-wordmark"
-            src="assets/images/el-paso-wordmark.png"
-            alt="EL PASO illustrated wordmark"
-            decoding="async"
-            fetchpriority="high"
-          />
-        </div>
-
-        <div class="taco-braza-lockup" aria-label="Taco Braza">
-          <span class="taco-braza-lockup__mark">TB</span>
-          <span class="taco-braza-lockup__name">Taco Braza</span>
-        </div>
-
-        <p class="coming-soon-hero__subtitle">
-          Sinaloa-style tacos fired with El Paso borderland flavor.
+    <section class="command-center" aria-labelledby="portfolio-title">
+      <div class="hero-panel">
+        <p class="hero-panel__eyebrow">William Boggs · MIS Systems Builder</p>
+        <h1 id="portfolio-title">Business Systems. Big Data Infrastructure. Cloud-Ready AI Design.</h1>
+        <p class="hero-panel__lede">
+          I build structured web, database, analytics, and infrastructure systems that connect business processes to technical execution.
         </p>
 
-        <a class="coming-soon-hero__cta" href="mailto:hello@tacobraza.com?subject=Taco%20Braza%20El%20Paso%20updates">
-          Get opening updates
+        <div class="hero-panel__actions" aria-label="Portfolio actions">
+          <a class="button button--primary" href="#projects">View Projects</a>
+          <a class="button" href="https://github.com/wbanalytics1" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="button" href="mailto:william@wbanalytics.com">Contact</a>
+        </div>
+      </div>
+
+      <aside class="agent-panel" aria-labelledby="agent-title">
+        <div class="agent-panel__header">
+          <span class="agent-panel__kicker">Micro AI Systems Companion</span>
+          <h2 id="agent-title">Atlas Node</h2>
+        </div>
+
+        <button class="agent-core" id="agent-core" type="button" aria-label="Cycle Atlas Node status">
+          <span class="agent-core__ring"></span>
+          <span class="agent-core__orb"></span>
+          <span class="agent-core__node agent-core__node--one"></span>
+          <span class="agent-core__node agent-core__node--two"></span>
+          <span class="agent-core__node agent-core__node--three"></span>
+        </button>
+
+        <div class="agent-readout" aria-live="polite">
+          <p class="agent-status" id="agent-status">Monitoring systems</p>
+          <p class="agent-message" id="agent-message">Transaction layer stable.</p>
+        </div>
+
+        <button class="agent-action" id="agent-action" type="button">Cycle diagnostic</button>
+      </aside>
+    </section>
+
+    <section class="systems-section" id="systems" aria-labelledby="systems-title">
+      <div class="section-heading">
+        <p>Systems Capability Matrix</p>
+        <h2 id="systems-title">Structured technology layers</h2>
+      </div>
+
+      <div class="system-grid">
+        <article class="capability-card">
+          <span>TPS</span>
+          <h3>Transaction Systems</h3>
+          <p>Forms, validation, records, workflows, and business process logic.</p>
+        </article>
+        <article class="capability-card">
+          <span>SQL</span>
+          <h3>Database Design</h3>
+          <p>SQL, ERDs, normalization, relational modeling, and DBeaver workflows.</p>
+        </article>
+        <article class="capability-card">
+          <span>DATA</span>
+          <h3>Big Data Analytics</h3>
+          <p>High-volume data thinking, reporting pipelines, dashboards, metrics, and decision-support systems.</p>
+        </article>
+        <article class="capability-card">
+          <span>CLOUD</span>
+          <h3>Cloud &amp; Visualization</h3>
+          <p>Cloud foundations, dashboards, reporting layers, deployment paths, and data visualization.</p>
+        </article>
+        <article class="capability-card">
+          <span>AI</span>
+          <h3>Neural Networks &amp; AI</h3>
+          <p>AI-assisted workflows, model reasoning, neural-network concepts, and intelligent interface design.</p>
+        </article>
+        <article class="capability-card">
+          <span>SEC</span>
+          <h3>Security Infrastructure</h3>
+          <p>Network fundamentals, access control thinking, risk awareness, and secure design.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="projects-section" id="projects" aria-labelledby="projects-title">
+      <div class="section-heading">
+        <p>Featured Work Strip</p>
+        <h2 id="projects-title">Portfolio systems in progress</h2>
+      </div>
+
+      <div class="project-strip">
+        <a class="project-card" href="/tacoBraza/taco-braza/">
+          <span class="project-card__code">CLIENT WEB</span>
+          <h3>Taco Braza</h3>
+          <p>Client-style restaurant launch page with brand-forward digital experience.</p>
+        </a>
+        <a class="project-card" href="/MIS3371/">
+          <span class="project-card__code">MIS 3371</span>
+          <h3>Patient Registration Portal</h3>
+          <p>Transaction-processing style healthcare intake interface.</p>
+        </a>
+        <a class="project-card" href="#systems">
+          <span class="project-card__code">MIS 3376</span>
+          <h3>SQL / Database Systems</h3>
+          <p>Relational database design, query work, and structured data modeling.</p>
         </a>
       </div>
     </section>
+
+    <footer class="status-row" aria-label="Portfolio status">
+      <span>BBA MIS · University of Houston</span>
+      <span>Cloud Architecture Track</span>
+      <span>Big Data Analytics</span>
+      <span>Neural Systems Lab</span>
+      <span>WBAnalytics Systems Lab</span>
+      <span class="status-pill status-pill--active status-row__version">Portfolio v2.0</span>
+    </footer>
   </main>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
