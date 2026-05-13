@@ -56,11 +56,76 @@
         </div>
 
         <button class="agent-core" id="agent-core" type="button" aria-label="Cycle Atlas Node status">
-          <span class="agent-core__ring"></span>
-          <span class="agent-core__orb"></span>
-          <span class="agent-core__node agent-core__node--one"></span>
-          <span class="agent-core__node agent-core__node--two"></span>
-          <span class="agent-core__node agent-core__node--three"></span>
+          <svg class="agent-emblem" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+            <defs>
+              <filter id="atlas-emblem-glow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="2.8" result="blur" />
+                <feColorMatrix
+                  in="blur"
+                  type="matrix"
+                  values="0 0 0 0 0.4 0 0 0 0 0.91 0 0 0 0 0.98 0 0 0 0.78 0"
+                  result="glow"
+                />
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+              <linearGradient id="atlas-emblem-gradient" x1="22" y1="52" x2="138" y2="108" gradientUnits="userSpaceOnUse">
+                <stop class="agent-emblem__grad agent-emblem__grad--hot" offset="0" />
+                <stop class="agent-emblem__grad agent-emblem__grad--core" offset="0.48" />
+                <stop class="agent-emblem__grad agent-emblem__grad--cool" offset="1" />
+              </linearGradient>
+
+              <radialGradient id="atlas-emblem-core" cx="50%" cy="48%" r="54%">
+                <stop class="agent-emblem__core-stop agent-emblem__core-stop--inner" offset="0" />
+                <stop class="agent-emblem__core-stop agent-emblem__core-stop--mid" offset="0.48" />
+                <stop class="agent-emblem__core-stop agent-emblem__core-stop--outer" offset="1" />
+              </radialGradient>
+            </defs>
+
+            <g class="agent-emblem__breath">
+              <circle class="agent-emblem__halo agent-emblem__halo--outer" cx="80" cy="80" r="68" />
+              <circle class="agent-emblem__halo agent-emblem__halo--inner" cx="80" cy="80" r="49" />
+
+              <path
+                class="agent-emblem__circuit"
+                d="M80 37v21M80 102v21M37 80h21M102 80h21M55 55l12 12M93 93l12 12M105 55 93 67M67 93l-12 12"
+              />
+
+              <path
+                class="agent-emblem__wake"
+                d="M80 80C58 42 25 49 23 78c-2 29 31 37 57 2 26-35 59-28 57 2-2 29-35 34-57-2Z"
+              />
+              <path
+                class="agent-emblem__serpent"
+                pathLength="1"
+                d="M80 80C58 42 25 49 23 78c-2 29 31 37 57 2 26-35 59-28 57 2-2 29-35 34-57-2Z"
+              />
+              <path
+                class="agent-emblem__edge"
+                pathLength="1"
+                d="M80 80C58 42 25 49 23 78c-2 29 31 37 57 2 26-35 59-28 57 2-2 29-35 34-57-2Z"
+              />
+
+              <path class="agent-emblem__filament agent-emblem__filament--upper" pathLength="1" d="M38 69c16-9 30-1 42 11 13 13 29 17 43 8" />
+              <path class="agent-emblem__filament agent-emblem__filament--lower" pathLength="1" d="M37 92c16 9 31 0 43-12 13-13 29-18 44-9" />
+
+              <path class="agent-emblem__tail" d="M34 94 19 84l16-8" />
+              <path class="agent-emblem__head" d="m123 57 20 16-21 10 7-11Z" />
+
+              <path class="agent-emblem__facet" d="m80 55 15 25-15 25-15-25Z" />
+              <path class="agent-emblem__facet-line" d="M65 80h30M80 55v50" />
+
+              <g class="agent-emblem__nodes">
+                <circle class="agent-emblem__node agent-emblem__node--warm" cx="44" cy="67" r="2.8" />
+                <circle class="agent-emblem__node" cx="116" cy="93" r="2.8" />
+                <circle class="agent-emblem__node" cx="80" cy="37" r="2.2" />
+                <circle class="agent-emblem__node agent-emblem__node--warm" cx="80" cy="123" r="2.2" />
+              </g>
+            </g>
+          </svg>
         </button>
 
         <div class="agent-readout" aria-live="polite">
