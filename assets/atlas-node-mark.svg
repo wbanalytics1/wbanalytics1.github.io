@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Atlas Node mark</title>
+  <desc id="desc">Original infinity, pyramid, and geometry emblem for WBAnalytics Atlas Node.</desc>
+  <defs>
+    <filter id="mark-glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="2.8" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.4 0 0 0 0 0.91 0 0 0 0 0.98 0 0 0 0.72 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="mark-loop" x1="30" y1="52" x2="130" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e8c16a"/>
+      <stop offset=".5" stop-color="#f7fdff"/>
+      <stop offset="1" stop-color="#67e8f9"/>
+    </linearGradient>
+    <linearGradient id="mark-pyramid" x1="60" y1="38" x2="100" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#e8c16a" stop-opacity=".32"/>
+    </linearGradient>
+    <radialGradient id="mark-core" cx="50%" cy="46%" r="58%">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".42" stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#050914" stop-opacity=".04"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="160" height="160" rx="36" fill="#050914"/>
+  <circle cx="80" cy="80" r="67" fill="none" stroke="#67e8f9" stroke-opacity=".22" stroke-width="1.2"/>
+  <circle cx="80" cy="80" r="52" fill="none" stroke="#74a8ff" stroke-opacity=".2" stroke-width="1" stroke-dasharray="4 16"/>
+  <path d="M80 26v108M26 80h108M40 40l80 80M120 40 40 120" fill="none" stroke="#67e8f9" stroke-opacity=".18" stroke-width=".7" stroke-dasharray="2 10"/>
+  <path d="M80 39 123 116H37ZM37 116h86M80 39v77" fill="none" stroke="#e8c16a" stroke-opacity=".16" stroke-width=".7" stroke-dasharray="3 10"/>
+
+  <g filter="url(#mark-glow)">
+    <path d="M80 80C64 52 32 52 32 80s32 28 48 0c16-28 48-28 48 0s-32 28-48 0Z" fill="none" stroke="#67e8f9" stroke-opacity=".14" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M80 80C64 52 32 52 32 80s32 28 48 0c16-28 48-28 48 0s-32 28-48 0Z" fill="none" stroke="url(#mark-loop)" stroke-width="5.9" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M80 36 126 118H34Z" fill="none" stroke="#e8c16a" stroke-opacity=".12" stroke-width="3.8" stroke-linejoin="round"/>
+    <path d="M80 39 123 116H37Z" fill="url(#mark-pyramid)" fill-opacity=".36"/>
+    <path d="M80 39 80 116H37Z" fill="#67e8f9" fill-opacity=".22"/>
+    <path d="M80 39 123 116H80Z" fill="#e8c16a" fill-opacity=".18"/>
+    <path d="M80 39 123 116H37Z" fill="none" stroke="#e8c16a" stroke-width="2.05" stroke-linejoin="round"/>
+    <path d="M80 39v77M80 80 37 116M80 80l43 36M58 80h44" fill="none" stroke="#fff" stroke-opacity=".48" stroke-width=".78"/>
+    <circle cx="80" cy="80" r="7" fill="url(#mark-core)" opacity=".74"/>
+    <circle cx="37" cy="80" r="2.8" fill="#e8c16a"/>
+    <circle cx="123" cy="80" r="2.8" fill="#67e8f9"/>
+    <circle cx="80" cy="39" r="2.5" fill="#67e8f9"/>
+    <circle cx="80" cy="116" r="2.5" fill="#e8c16a"/>
+  </g>
+</svg>

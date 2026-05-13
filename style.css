@@ -144,6 +144,13 @@ button {
   box-shadow: var(--shadow-cyan);
 }
 
+.brand-lockup__mark img {
+  display: block;
+  width: 34px;
+  height: 34px;
+  filter: drop-shadow(0 0 8px rgba(103, 232, 249, 0.48));
+}
+
 .brand-lockup__text {
   display: grid;
   gap: 0.14rem;
@@ -533,25 +540,12 @@ button {
   border: 1px solid var(--agent-halo);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, rgba(103, 232, 249, 0.18), transparent 34%),
-    conic-gradient(from 225deg, transparent, rgba(103, 232, 249, 0.1), transparent 46%, rgba(232, 193, 106, 0.08), transparent 72%),
+    radial-gradient(circle at 50% 50%, rgba(103, 232, 249, 0.16), transparent 36%),
+    conic-gradient(from 225deg, transparent, rgba(103, 232, 249, 0.09), transparent 46%, rgba(232, 193, 106, 0.07), transparent 72%),
     rgba(255, 255, 255, 0.035);
   cursor: pointer;
   box-shadow: inset 0 0 24px rgba(103, 232, 249, 0.1), var(--shadow-cyan);
   transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
-}
-
-.agent-core::before {
-  position: absolute;
-  inset: 12%;
-  border: 1px solid rgba(147, 169, 204, 0.12);
-  border-radius: 50%;
-  background:
-    linear-gradient(90deg, transparent 48%, rgba(103, 232, 249, 0.18) 49%, transparent 51%),
-    linear-gradient(0deg, transparent 48%, rgba(103, 232, 249, 0.14) 49%, transparent 51%);
-  opacity: 0.58;
-  content: "";
-  animation: agent-spin 24s linear infinite;
 }
 
 .agent-core:hover,
@@ -561,7 +555,7 @@ button {
   box-shadow: inset 0 0 28px rgba(103, 232, 249, 0.16), 0 0 34px rgba(103, 232, 249, 0.32);
 }
 
-.agent-emblem {
+.agent-symbol {
   position: relative;
   z-index: 1;
   width: 96%;
@@ -569,165 +563,275 @@ button {
   overflow: visible;
 }
 
-.agent-emblem__breath {
+.agent-symbol__breath {
   transform-origin: 80px 80px;
-  animation: agent-emblem-breathe 4.8s ease-in-out infinite;
+  animation: agent-symbol-breathe 4.8s ease-in-out infinite;
 }
 
-.agent-emblem__grad--hot,
-.agent-emblem__node--warm {
+.agent-symbol__grad--warm,
+.agent-symbol__node--left,
+.agent-symbol__node--base {
   stop-color: var(--agent-warm);
   fill: var(--agent-warm);
 }
 
-.agent-emblem__grad--core {
+.agent-symbol__grad--bright {
   stop-color: #f7fdff;
 }
 
-.agent-emblem__grad--cool,
-.agent-emblem__core-stop--mid {
+.agent-symbol__grad--cool,
+.agent-symbol__pyramid-stop--top,
+.agent-symbol__node--right,
+.agent-symbol__node--apex {
   stop-color: var(--agent-accent);
+  fill: var(--agent-accent);
 }
 
-.agent-emblem__core-stop--inner {
+.agent-symbol__pyramid-stop--base {
+  stop-color: rgba(232, 193, 106, 0.22);
+}
+
+.agent-symbol__core-stop--inner {
   stop-color: #ffffff;
 }
 
-.agent-emblem__core-stop--outer {
-  stop-color: rgba(5, 9, 20, 0.18);
+.agent-symbol__core-stop--mid {
+  stop-color: var(--agent-accent);
 }
 
-.agent-emblem__halo,
-.agent-emblem__wake,
-.agent-emblem__serpent,
-.agent-emblem__edge,
-.agent-emblem__filament,
-.agent-emblem__circuit,
-.agent-emblem__tail,
-.agent-emblem__facet-line {
+.agent-symbol__core-stop--outer {
+  stop-color: rgba(5, 9, 20, 0.04);
+}
+
+.agent-symbol__halo,
+.agent-symbol__aura,
+.agent-symbol__axis,
+.agent-symbol__construction,
+.agent-symbol__alignment-sweep,
+.agent-symbol__loop-wake,
+.agent-symbol__loop,
+.agent-symbol__trace,
+.agent-symbol__energy,
+.agent-symbol__pyramid-aura,
+.agent-symbol__pyramid,
+.agent-symbol__pyramid-line,
+.agent-symbol__pyramid-glint {
   fill: none;
   vector-effect: non-scaling-stroke;
 }
 
-.agent-emblem__halo {
+.agent-symbol__halo {
   transform-box: fill-box;
   transform-origin: center;
   stroke: var(--agent-halo);
   stroke-width: 0.9;
 }
 
-.agent-emblem__halo--outer {
+.agent-symbol__halo--outer {
   stroke-dasharray: 1 8;
   animation: agent-spin 28s linear infinite;
 }
 
-.agent-emblem__halo--inner {
-  stroke-dasharray: 5 13;
-  animation: agent-spin 20s linear infinite reverse;
+.agent-symbol__halo--inner {
+  stroke-dasharray: 4 16;
+  opacity: 0.72;
+  animation: agent-spin 34s linear infinite reverse;
 }
 
-.agent-emblem__circuit {
+.agent-symbol__aura {
+  transform-origin: 80px 80px;
   stroke: var(--agent-accent);
-  stroke-width: 0.85;
-  stroke-dasharray: 2 7;
-  opacity: 0.38;
-  animation: agent-circuit-pulse 4.5s ease-in-out infinite;
+  stroke-width: 0.8;
+  opacity: 0;
 }
 
-.agent-emblem__wake {
+.agent-symbol__aura--one {
+  animation: agent-symbol-aura 6.4s ease-in-out infinite;
+}
+
+.agent-symbol__aura--two {
+  animation: agent-symbol-aura 6.4s ease-in-out infinite 2.1s;
+}
+
+.agent-symbol__axis {
+  stroke: var(--agent-accent);
+  stroke-width: 0.62;
+  stroke-dasharray: 2 10;
+  opacity: 0.22;
+  animation: agent-symbol-axis 6.4s ease-in-out infinite;
+}
+
+.agent-symbol__construction {
+  stroke: var(--agent-warm);
+  stroke-width: 0.68;
+  stroke-dasharray: 3 10;
+  opacity: 0.16;
+  animation: agent-symbol-construction 8.4s ease-in-out infinite;
+}
+
+.agent-symbol__alignment-sweep {
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 0.68;
+  stroke-dasharray: 8 96;
+  opacity: 0.12;
+  animation: agent-symbol-sweep 8.8s cubic-bezier(0.65, 0, 0.2, 1) infinite;
+}
+
+.agent-symbol__loop-wake {
   stroke: var(--agent-accent);
   stroke-width: 12;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.16;
-  filter: url(#atlas-emblem-glow);
+  opacity: 0.13;
+  filter: url(#atlas-node-symbol-glow);
 }
 
-.agent-emblem__serpent {
-  stroke: url(#atlas-emblem-gradient);
-  stroke-width: 6.8;
+.agent-symbol__loop {
+  stroke: url(#atlas-node-loop-gradient);
+  stroke-width: 5.8;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 0.73 1;
-  stroke-dashoffset: 1;
-  filter: url(#atlas-emblem-glow);
-  animation: agent-line-trace 5.8s cubic-bezier(0.72, 0, 0.22, 1) infinite;
+  filter: url(#atlas-node-symbol-glow);
+  opacity: 0.94;
 }
 
-.agent-emblem__edge {
+.agent-symbol__trace {
   stroke: rgba(255, 255, 255, 0.78);
   stroke-width: 1.05;
   stroke-linecap: round;
-  stroke-dasharray: 0.06 0.13;
-  opacity: 0.56;
-  animation: agent-edge-scan 4.6s linear infinite;
+  stroke-dasharray: 0.08 0.16;
+  opacity: 0.6;
+  animation: agent-symbol-trace 4.8s linear infinite;
 }
 
-.agent-emblem__filament {
-  stroke: var(--agent-secondary);
-  stroke-width: 1.15;
+.agent-symbol__energy {
+  stroke: url(#atlas-node-loop-gradient);
   stroke-linecap: round;
-  stroke-dasharray: 0.2 0.18;
-  opacity: 0.52;
-  animation: agent-filament-flow 6.2s linear infinite;
-}
-
-.agent-emblem__filament--lower {
-  animation-direction: reverse;
-}
-
-.agent-emblem__tail,
-.agent-emblem__head {
   stroke-linejoin: round;
-  filter: url(#atlas-emblem-glow);
+  filter: url(#atlas-node-symbol-glow);
 }
 
-.agent-emblem__tail {
-  stroke: var(--agent-warm);
+.agent-symbol__energy--primary {
   stroke-width: 2.2;
+  stroke-dasharray: 0.1 0.9;
+  stroke-dashoffset: 0.42;
+  opacity: 0.84;
+  animation: agent-symbol-energy 5.6s cubic-bezier(0.58, 0, 0.16, 1) infinite;
+}
+
+.agent-symbol__energy--secondary {
+  stroke: var(--agent-warm);
+  stroke-width: 1.18;
+  stroke-dasharray: 0.045 0.955;
+  stroke-dashoffset: 0.88;
+  opacity: 0.48;
+  animation: agent-symbol-energy 8.4s cubic-bezier(0.58, 0, 0.16, 1) infinite reverse;
+}
+
+.agent-symbol__pyramid-aura {
+  stroke: var(--agent-warm);
+  stroke-width: 3.8;
+  stroke-linejoin: round;
+  opacity: 0.08;
+  filter: url(#atlas-node-symbol-glow);
+  animation: agent-symbol-pyramid-aura 5.8s ease-in-out infinite;
+}
+
+.agent-symbol__pyramid-fill {
+  fill: url(#atlas-node-pyramid-gradient);
+  opacity: 0.34;
+  animation: agent-symbol-pyramid-core 4.6s ease-in-out infinite;
+}
+
+.agent-symbol__pyramid-face {
+  opacity: 0.22;
+}
+
+.agent-symbol__pyramid-face--left {
+  fill: rgba(103, 232, 249, 0.3);
+}
+
+.agent-symbol__pyramid-face--right {
+  fill: rgba(232, 193, 106, 0.22);
+}
+
+.agent-symbol__pyramid {
+  stroke: var(--agent-warm);
+  stroke-width: 2.05;
+  stroke-linejoin: round;
+  opacity: 0.94;
+  filter: url(#atlas-node-symbol-glow);
+}
+
+.agent-symbol__pyramid-line {
+  stroke: rgba(255, 255, 255, 0.48);
+  stroke-width: 0.78;
+  opacity: 0.52;
+}
+
+.agent-symbol__pyramid-glint {
+  stroke: rgba(255, 255, 255, 0.82);
+  stroke-width: 0.82;
   stroke-linecap: round;
-  opacity: 0.86;
+  stroke-dasharray: 5 28;
+  stroke-dashoffset: 28;
+  opacity: 0;
+  animation: agent-symbol-glint 6.6s ease-in-out infinite;
 }
 
-.agent-emblem__head {
-  fill: url(#atlas-emblem-gradient);
-  stroke: rgba(255, 255, 255, 0.44);
-  stroke-width: 0.9;
-  opacity: 0.9;
+.agent-symbol__pyramid-glint--two {
+  animation-delay: 1.9s;
 }
 
-.agent-emblem__facet {
-  fill: url(#atlas-emblem-core);
-  stroke: var(--agent-accent);
-  stroke-width: 0.85;
-  filter: url(#atlas-emblem-glow);
-  opacity: 0.88;
+.agent-symbol__core {
+  transform-origin: 80px 80px;
+  fill: url(#atlas-node-core-gradient);
+  opacity: 0.72;
+  filter: url(#atlas-node-symbol-glow);
+  animation: agent-symbol-core 4.6s ease-in-out infinite;
 }
 
-.agent-emblem__facet-line {
-  stroke: rgba(255, 255, 255, 0.46);
-  stroke-width: 0.75;
-}
-
-.agent-emblem__node {
+.agent-symbol__node {
   transform-box: fill-box;
   transform-origin: center;
-  fill: var(--agent-accent);
-  filter: url(#atlas-emblem-glow);
-  opacity: 0.92;
-  animation: agent-node-pulse 3.6s ease-in-out infinite;
+  filter: url(#atlas-node-symbol-glow);
+  animation: agent-symbol-node 3.7s ease-in-out infinite;
 }
 
-.agent-emblem__node:nth-child(2) {
+.agent-symbol__node--right {
   animation-delay: 0.8s;
 }
 
-.agent-emblem__node:nth-child(3) {
+.agent-symbol__node--apex {
   animation-delay: 1.4s;
 }
 
-.agent-emblem__node:nth-child(4) {
+.agent-symbol__node--base {
   animation-delay: 2.1s;
+}
+
+.agent-panel[data-agent-tone="data"] {
+  --agent-accent: #67e8f9;
+  --agent-secondary: #b7f4ff;
+  --agent-halo: rgba(103, 232, 249, 0.26);
+}
+
+.agent-panel[data-agent-tone="workflow"] {
+  --agent-accent: var(--color-gold);
+  --agent-secondary: var(--color-cyan);
+  --agent-halo: rgba(232, 193, 106, 0.22);
+}
+
+.agent-panel[data-agent-tone="cloud"] {
+  --agent-accent: #74a8ff;
+  --agent-secondary: var(--color-cyan);
+  --agent-halo: rgba(116, 168, 255, 0.24);
+}
+
+.agent-panel[data-agent-tone="security"] {
+  --agent-accent: var(--color-green);
+  --agent-secondary: var(--color-cyan);
+  --agent-halo: rgba(112, 240, 176, 0.22);
 }
 
 .agent-readout {
@@ -764,103 +868,164 @@ button {
   width: 100%;
 }
 
-.agent-panel[data-agent-tone="data"] {
-  --agent-accent: #67e8f9;
-  --agent-secondary: #b7f4ff;
-  --agent-halo: rgba(103, 232, 249, 0.26);
-}
-
-.agent-panel[data-agent-tone="workflow"] {
-  --agent-accent: var(--color-gold);
-  --agent-secondary: var(--color-cyan);
-  --agent-halo: rgba(232, 193, 106, 0.22);
-}
-
-.agent-panel[data-agent-tone="cloud"] {
-  --agent-accent: #74a8ff;
-  --agent-secondary: var(--color-cyan);
-  --agent-halo: rgba(116, 168, 255, 0.24);
-}
-
-.agent-panel[data-agent-tone="security"] {
-  --agent-accent: var(--color-green);
-  --agent-secondary: var(--color-cyan);
-  --agent-halo: rgba(112, 240, 176, 0.22);
-}
-
 @keyframes agent-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-@keyframes agent-emblem-breathe {
+@keyframes agent-symbol-breathe {
   0%,
   100% {
-    transform: scale(0.97);
+    transform: scale(0.985);
   }
 
   50% {
-    transform: scale(1.025);
+    transform: scale(1.018);
   }
 }
 
-@keyframes agent-line-trace {
+@keyframes agent-symbol-aura {
   0% {
-    stroke-dashoffset: 1;
-    opacity: 0.68;
+    opacity: 0;
+    transform: scale(0.82);
   }
 
-  44%,
-  64% {
-    stroke-dashoffset: 0.05;
-    opacity: 1;
+  34% {
+    opacity: 0.2;
   }
 
   100% {
-    stroke-dashoffset: -0.95;
-    opacity: 0.72;
+    opacity: 0;
+    transform: scale(1.15);
   }
 }
 
-@keyframes agent-edge-scan {
+@keyframes agent-symbol-axis {
+  0%,
+  100% {
+    opacity: 0.16;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    opacity: 0.3;
+    stroke-dashoffset: -8;
+  }
+}
+
+@keyframes agent-symbol-construction {
+  0%,
+  100% {
+    opacity: 0.1;
+    stroke-dashoffset: 0;
+  }
+
+  45% {
+    opacity: 0.22;
+    stroke-dashoffset: -6;
+  }
+}
+
+@keyframes agent-symbol-sweep {
+  0%,
+  12% {
+    opacity: 0;
+    stroke-dashoffset: 84;
+  }
+
+  38% {
+    opacity: 0.34;
+  }
+
+  72%,
+  100% {
+    opacity: 0;
+    stroke-dashoffset: -84;
+  }
+}
+
+@keyframes agent-symbol-trace {
   to {
     stroke-dashoffset: -1;
   }
 }
 
-@keyframes agent-filament-flow {
+@keyframes agent-symbol-energy {
   0% {
-    stroke-dashoffset: 0;
-    opacity: 0.32;
+    stroke-dashoffset: 1;
+    opacity: 0.16;
   }
 
-  50% {
-    opacity: 0.72;
+  20%,
+  72% {
+    opacity: 0.84;
   }
 
   100% {
     stroke-dashoffset: -1;
-    opacity: 0.32;
+    opacity: 0.16;
   }
 }
 
-@keyframes agent-circuit-pulse {
+@keyframes agent-symbol-pyramid-aura {
   0%,
   100% {
-    opacity: 0.24;
+    opacity: 0.05;
   }
 
-  50% {
-    opacity: 0.48;
+  48% {
+    opacity: 0.14;
   }
 }
 
-@keyframes agent-node-pulse {
+@keyframes agent-symbol-pyramid-core {
   0%,
   100% {
-    opacity: 0.52;
-    transform: scale(0.82);
+    opacity: 0.28;
+  }
+
+  48% {
+    opacity: 0.42;
+  }
+}
+
+@keyframes agent-symbol-core {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.88);
+  }
+
+  48% {
+    opacity: 0.86;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes agent-symbol-glint {
+  0%,
+  32% {
+    opacity: 0;
+    stroke-dashoffset: 28;
+  }
+
+  45% {
+    opacity: 0.7;
+  }
+
+  62%,
+  100% {
+    opacity: 0;
+    stroke-dashoffset: -28;
+  }
+}
+
+@keyframes agent-symbol-node {
+  0%,
+  100% {
+    opacity: 0.56;
+    transform: scale(0.84);
   }
 
   50% {

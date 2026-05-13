@@ -5,9 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
     name="description"
-    content="WBAnalytics is William Boggs' professional portfolio for MIS systems, big data analytics, cloud-ready AI design, databases, transaction systems, and secure infrastructure."
+    content="Atlas Node by WBAnalytics is William Boggs' systems portfolio for MIS, big data analytics, cloud-ready AI design, databases, transaction systems, and secure infrastructure."
   />
-  <title>WBAnalytics | William Boggs Systems Portfolio</title>
+  <meta name="theme-color" content="#050914" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://wbanalytics1.github.io/" />
+  <meta property="og:title" content="Atlas Node | WBAnalytics Systems Portfolio" />
+  <meta
+    property="og:description"
+    content="A dark sci-fi systems portfolio for big data infrastructure, cloud-ready AI design, transaction systems, and secure architecture."
+  />
+  <meta property="og:image" content="https://wbanalytics1.github.io/assets/atlas-node-social.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Atlas Node | WBAnalytics Systems Portfolio" />
+  <meta
+    name="twitter:description"
+    content="WBAnalytics systems portfolio for big data, cloud-ready AI, secure infrastructure, and transaction systems."
+  />
+  <meta name="twitter:image" content="https://wbanalytics1.github.io/assets/atlas-node-social.svg" />
+  <link rel="canonical" href="https://wbanalytics1.github.io/" />
+  <link rel="icon" type="image/svg+xml" href="assets/atlas-node-mark.svg" />
+  <title>Atlas Node | WBAnalytics Systems Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -19,7 +37,9 @@
 
     <nav class="nav-bar" aria-label="Primary navigation">
       <a class="brand-lockup" href="#top" aria-label="WBAnalytics home">
-        <span class="brand-lockup__mark">WBA</span>
+        <span class="brand-lockup__mark" aria-hidden="true">
+          <img src="assets/atlas-node-mark.svg" alt="" />
+        </span>
         <span class="brand-lockup__text">
           <span class="brand-lockup__name">WBAnalytics</span>
           <span class="brand-lockup__subtitle">Systems • Big Data • Cloud • AI • Security</span>
@@ -56,14 +76,14 @@
         </div>
 
         <button class="agent-core" id="agent-core" type="button" aria-label="Cycle Atlas Node status">
-          <svg class="agent-emblem" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+          <svg class="agent-symbol" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
             <defs>
-              <filter id="atlas-emblem-glow" x="-40%" y="-40%" width="180%" height="180%">
-                <feGaussianBlur stdDeviation="2.8" result="blur" />
+              <filter id="atlas-node-symbol-glow" x="-35%" y="-35%" width="170%" height="170%">
+                <feGaussianBlur stdDeviation="2.7" result="blur" />
                 <feColorMatrix
                   in="blur"
                   type="matrix"
-                  values="0 0 0 0 0.4 0 0 0 0 0.91 0 0 0 0 0.98 0 0 0 0.78 0"
+                  values="0 0 0 0 0.4 0 0 0 0 0.91 0 0 0 0 0.98 0 0 0 0.72 0"
                   result="glow"
                 />
                 <feMerge>
@@ -72,58 +92,72 @@
                 </feMerge>
               </filter>
 
-              <linearGradient id="atlas-emblem-gradient" x1="22" y1="52" x2="138" y2="108" gradientUnits="userSpaceOnUse">
-                <stop class="agent-emblem__grad agent-emblem__grad--hot" offset="0" />
-                <stop class="agent-emblem__grad agent-emblem__grad--core" offset="0.48" />
-                <stop class="agent-emblem__grad agent-emblem__grad--cool" offset="1" />
+              <linearGradient id="atlas-node-loop-gradient" x1="27" y1="54" x2="133" y2="106" gradientUnits="userSpaceOnUse">
+                <stop class="agent-symbol__grad agent-symbol__grad--warm" offset="0" />
+                <stop class="agent-symbol__grad agent-symbol__grad--bright" offset="0.5" />
+                <stop class="agent-symbol__grad agent-symbol__grad--cool" offset="1" />
               </linearGradient>
 
-              <radialGradient id="atlas-emblem-core" cx="50%" cy="48%" r="54%">
-                <stop class="agent-emblem__core-stop agent-emblem__core-stop--inner" offset="0" />
-                <stop class="agent-emblem__core-stop agent-emblem__core-stop--mid" offset="0.48" />
-                <stop class="agent-emblem__core-stop agent-emblem__core-stop--outer" offset="1" />
+              <linearGradient id="atlas-node-pyramid-gradient" x1="58" y1="50" x2="102" y2="112" gradientUnits="userSpaceOnUse">
+                <stop class="agent-symbol__pyramid-stop agent-symbol__pyramid-stop--top" offset="0" />
+                <stop class="agent-symbol__pyramid-stop agent-symbol__pyramid-stop--base" offset="1" />
+              </linearGradient>
+
+              <radialGradient id="atlas-node-core-gradient" cx="50%" cy="46%" r="58%">
+                <stop class="agent-symbol__core-stop agent-symbol__core-stop--inner" offset="0" />
+                <stop class="agent-symbol__core-stop agent-symbol__core-stop--mid" offset="0.42" />
+                <stop class="agent-symbol__core-stop agent-symbol__core-stop--outer" offset="1" />
               </radialGradient>
             </defs>
 
-            <g class="agent-emblem__breath">
-              <circle class="agent-emblem__halo agent-emblem__halo--outer" cx="80" cy="80" r="68" />
-              <circle class="agent-emblem__halo agent-emblem__halo--inner" cx="80" cy="80" r="49" />
+            <g class="agent-symbol__breath">
+              <circle class="agent-symbol__halo agent-symbol__halo--outer" cx="80" cy="80" r="67" />
+              <circle class="agent-symbol__halo agent-symbol__halo--inner" cx="80" cy="80" r="52" />
+              <circle class="agent-symbol__aura agent-symbol__aura--one" cx="80" cy="80" r="58" />
+              <circle class="agent-symbol__aura agent-symbol__aura--two" cx="80" cy="80" r="38" />
+              <path class="agent-symbol__axis" d="M80 26v108M26 80h108M40 40l80 80M120 40 40 120" />
+              <path class="agent-symbol__construction" d="M80 39 123 116H37ZM37 116h86M80 39v77" />
+              <path class="agent-symbol__alignment-sweep" d="M80 26v108M26 80h108" />
 
               <path
-                class="agent-emblem__circuit"
-                d="M80 37v21M80 102v21M37 80h21M102 80h21M55 55l12 12M93 93l12 12M105 55 93 67M67 93l-12 12"
-              />
-
-              <path
-                class="agent-emblem__wake"
-                d="M80 80C58 42 25 49 23 78c-2 29 31 37 57 2 26-35 59-28 57 2-2 29-35 34-57-2Z"
+                class="agent-symbol__loop-wake"
+                d="M80 80C64 52 32 52 32 80s32 28 48 0c16-28 48-28 48 0s-32 28-48 0Z"
               />
               <path
-                class="agent-emblem__serpent"
+                class="agent-symbol__loop"
                 pathLength="1"
-                d="M80 80C58 42 25 49 23 78c-2 29 31 37 57 2 26-35 59-28 57 2-2 29-35 34-57-2Z"
+                d="M80 80C64 52 32 52 32 80s32 28 48 0c16-28 48-28 48 0s-32 28-48 0Z"
               />
               <path
-                class="agent-emblem__edge"
+                class="agent-symbol__trace"
                 pathLength="1"
-                d="M80 80C58 42 25 49 23 78c-2 29 31 37 57 2 26-35 59-28 57 2-2 29-35 34-57-2Z"
+                d="M80 80C64 52 32 52 32 80s32 28 48 0c16-28 48-28 48 0s-32 28-48 0Z"
+              />
+              <path
+                class="agent-symbol__energy agent-symbol__energy--primary"
+                pathLength="1"
+                d="M80 80C64 52 32 52 32 80s32 28 48 0c16-28 48-28 48 0s-32 28-48 0Z"
+              />
+              <path
+                class="agent-symbol__energy agent-symbol__energy--secondary"
+                pathLength="1"
+                d="M80 80C64 52 32 52 32 80s32 28 48 0c16-28 48-28 48 0s-32 28-48 0Z"
               />
 
-              <path class="agent-emblem__filament agent-emblem__filament--upper" pathLength="1" d="M38 69c16-9 30-1 42 11 13 13 29 17 43 8" />
-              <path class="agent-emblem__filament agent-emblem__filament--lower" pathLength="1" d="M37 92c16 9 31 0 43-12 13-13 29-18 44-9" />
+              <path class="agent-symbol__pyramid-aura" d="M80 36 126 118H34Z" />
+              <path class="agent-symbol__pyramid-fill" d="M80 39 123 116H37Z" />
+              <path class="agent-symbol__pyramid-face agent-symbol__pyramid-face--left" d="M80 39 80 116H37Z" />
+              <path class="agent-symbol__pyramid-face agent-symbol__pyramid-face--right" d="M80 39 123 116H80Z" />
+              <path class="agent-symbol__pyramid" d="M80 39 123 116H37Z" />
+              <path class="agent-symbol__pyramid-line" d="M80 39v77M80 80 37 116M80 80l43 36M58 80h44" />
+              <path class="agent-symbol__pyramid-glint agent-symbol__pyramid-glint--one" d="M61 82h38" />
+              <path class="agent-symbol__pyramid-glint agent-symbol__pyramid-glint--two" d="M67 99h26" />
+              <circle class="agent-symbol__core" cx="80" cy="80" r="7" />
 
-              <path class="agent-emblem__tail" d="M34 94 19 84l16-8" />
-              <path class="agent-emblem__head" d="m123 57 20 16-21 10 7-11Z" />
-
-              <path class="agent-emblem__facet" d="m80 55 15 25-15 25-15-25Z" />
-              <path class="agent-emblem__facet-line" d="M65 80h30M80 55v50" />
-
-              <g class="agent-emblem__nodes">
-                <circle class="agent-emblem__node agent-emblem__node--warm" cx="44" cy="67" r="2.8" />
-                <circle class="agent-emblem__node" cx="116" cy="93" r="2.8" />
-                <circle class="agent-emblem__node" cx="80" cy="37" r="2.2" />
-                <circle class="agent-emblem__node agent-emblem__node--warm" cx="80" cy="123" r="2.2" />
-              </g>
+              <circle class="agent-symbol__node agent-symbol__node--left" cx="37" cy="80" r="2.8" />
+              <circle class="agent-symbol__node agent-symbol__node--right" cx="123" cy="80" r="2.8" />
+              <circle class="agent-symbol__node agent-symbol__node--apex" cx="80" cy="39" r="2.5" />
+              <circle class="agent-symbol__node agent-symbol__node--base" cx="80" cy="116" r="2.5" />
             </g>
           </svg>
         </button>
